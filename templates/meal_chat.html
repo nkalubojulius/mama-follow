@@ -1,0 +1,399 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Meal Chatbot & Nutrition Planner | MamaCare{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Page Header -->
+  <div class="text-center max-w-700 mx-auto mb-4">
+    <span class="badge bg-pink text-danger px-3 py-2 rounded-pill mb-2 fw-bold" style="background-color: #ffe4e9;">
+      <i class="fa-solid fa-wand-magic-sparkles me-1"></i> AI Nutrition Planner
+    </span>
+    <h2 class="fw-bold text-dark">Smart Meal Chatbot</h2>
+    <p class="text-muted">
+      Receive personalized, trimester-tailored meal ideas, nutrient breakdowns, and healthy recipes based on your dietary preferences and lifestyle.
+    </p>
+  </div>
+
+  <!-- Medical Safety Banner -->
+  <div class="alert alert-light border-0 shadow-sm p-3 mb-4 rounded-3 d-flex align-items-center gap-3" style="background-color: #fff9fa; border-left: 4px solid var(--primary-pink) !important;">
+    <i class="fa-solid fa-shield-heart text-danger fa-2x flex-shrink-0"></i>
+    <div class="small text-muted mb-0">
+      <strong class="text-dark">Educational Nutrition Guidance Only:</strong> MamaCare AI provides general pregnancy nutrition suggestions and cannot diagnose medical conditions, prescribe clinical diets, or replace consultation with your obstetrician or a Registered Dietitian. If managing gestational diabetes, preeclampsia, or severe food allergies, please seek professional clinical advice.
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Left Column: Dietary Profile & Preferences Form -->
+    <div class="col-lg-4">
+      <div class="dash-card shadow-sm mb-4">
+        <div class="dash-header d-flex justify-content-between align-items-center">
+          <span><i class="fa-solid fa-sliders text-danger me-2"></i> Nutrition Profile</span>
+          <span class="badge bg-light text-dark border">Preferences</span>
+        </div>
+        <div class="dash-body">
+          <form method="POST" action="{{ url_for('meal_chat') }}" id="dietPreferencesForm">
+            <!-- Trimester & Week -->
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label small fw-bold text-dark">Trimester</label>
+                <select name="trimester" id="prefTrimester" class="form-select form-select-sm">
+                  <option value="1" {% if prefs.trimester == 1 %}selected{% endif %}>Trimester 1 (W1-12)</option>
+                  <option value="2" {% if prefs.trimester == 2 %}selected{% endif %}>Trimester 2 (W13-27)</option>
+                  <option value="3" {% if prefs.trimester == 3 %}selected{% endif %}>Trimester 3 (W28-40)</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label small fw-bold text-dark">Pregnancy Week</label>
+                <input type="number" name="pregnancy_week" id="prefWeek" class="form-control form-control-sm" min="1" max="40" value="{{ prefs.pregnancy_week or 20 }}">
+              </div>
+            </div>
+
+            <!-- Food Preference Style -->
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Dietary Preference</label>
+              <select name="dietary_preference" id="prefDietStyle" class="form-select form-select-sm">
+                <option value="Vegetarian" {% if prefs.dietary_preference == 'Vegetarian' %}selected{% endif %}>Vegetarian (Lacto/Ovo)</option>
+                <option value="Non-Vegetarian" {% if prefs.dietary_preference == 'Non-Vegetarian' %}selected{% endif %}>Non-Vegetarian (Poultry/Fish/Eggs)</option>
+                <option value="Vegan" {% if prefs.dietary_preference == 'Vegan' %}selected{% endif %}>100% Plant-Based / Vegan</option>
+                <option value="Pescatarian" {% if prefs.dietary_preference == 'Pescatarian' %}selected{% endif %}>Pescatarian (Fish & Veg)</option>
+                <option value="Eggetarian" {% if prefs.dietary_preference == 'Eggetarian' %}selected{% endif %}>Eggetarian (Vegetarian + Eggs)</option>
+              </select>
+            </div>
+
+            <!-- Food Allergies -->
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Food Allergies (to exclude)</label>
+              <input type="text" name="allergies" id="prefAllergies" class="form-control form-control-sm" placeholder="e.g. Dairy/Lactose, Peanuts, Gluten" value="{{ prefs.allergies or 'None' }}">
+              <div class="form-text x-small">e.g. Nuts, Dairy, Gluten, Shellfish, Eggs, Soy</div>
+            </div>
+
+            <!-- Dietary Restrictions -->
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Dietary Restrictions</label>
+              <input type="text" name="dietary_restrictions" id="prefRestrictions" class="form-control form-control-sm" placeholder="e.g. Low Sodium, Mild Spice, Halal" value="{{ prefs.dietary_restrictions or 'None' }}">
+            </div>
+
+            <!-- Foods Usually Eaten / Staples -->
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Foods You Usually Eat / Staples</label>
+              <textarea name="foods_usually_eaten" id="prefUsualFoods" class="form-control form-control-sm" rows="2" placeholder="e.g. Oatmeal, Lentils, Rice, Apples, Spinach, Chicken, Paneer">{{ prefs.foods_usually_eaten or '' }}</textarea>
+            </div>
+
+            <!-- Relevant Medical Conditions -->
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Relevant Medical Conditions</label>
+              <select name="medical_conditions" id="prefConditions" class="form-select form-select-sm">
+                <option value="None" {% if prefs.medical_conditions == 'None' %}selected{% endif %}>None / Normal Healthy</option>
+                <option value="Morning Sickness" {% if prefs.medical_conditions == 'Morning Sickness' %}selected{% endif %}>Morning Sickness / Nausea</option>
+                <option value="Gestational Diabetes" {% if prefs.medical_conditions == 'Gestational Diabetes' %}selected{% endif %}>Gestational Diabetes (Carb Awareness)</option>
+                <option value="Anemia / Low Iron" {% if prefs.medical_conditions == 'Anemia / Low Iron' %}selected{% endif %}>Anemia / Low Iron</option>
+                <option value="Hypertension" {% if prefs.medical_conditions == 'Hypertension' %}selected{% endif %}>Hypertension / Low Sodium Focus</option>
+                <option value="Acid Reflux / Heartburn" {% if prefs.medical_conditions == 'Acid Reflux / Heartburn' %}selected{% endif %}>Acid Reflux / Heartburn</option>
+                <option value="Constipation" {% if prefs.medical_conditions == 'Constipation' %}selected{% endif %}>Constipation / High Fiber Need</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-sm btn-mamacare w-100 fw-bold">
+              <i class="fa-solid fa-floppy-disk me-1"></i> Save Profile Preferences
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Quick Links Card -->
+      <div class="dash-card shadow-sm">
+        <div class="dash-header">
+          <span><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i> Meal Planning Tools</span>
+        </div>
+        <div class="dash-body">
+          <ul class="list-unstyled mb-0 small">
+            <li class="mb-2"><a href="{{ url_for('reminders') }}" class="text-decoration-none text-dark d-flex align-items-center justify-content-between"><span><i class="fa-solid fa-bell text-warning me-2"></i> Daily Meal Reminders</span> <i class="fa-solid fa-chevron-right text-muted x-small"></i></a></li>
+            <li class="mb-2"><a href="{{ url_for('nutrition') }}" class="text-decoration-none text-dark d-flex align-items-center justify-content-between"><span><i class="fa-solid fa-apple-whole text-success me-2"></i> Trimester Nutrition Guide</span> <i class="fa-solid fa-chevron-right text-muted x-small"></i></a></li>
+            <li><a href="{{ url_for('emergency') }}" class="text-decoration-none text-dark d-flex align-items-center justify-content-between"><span><i class="fa-solid fa-triangle-exclamation text-danger me-2"></i> Foods to Avoid Matrix</span> <i class="fa-solid fa-chevron-right text-muted x-small"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Interactive Smart Meal Chat -->
+    <div class="col-lg-8">
+      <div class="meal-chat-container shadow-sm">
+        <!-- Chat Header -->
+        <div class="meal-chat-header d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center gap-2">
+            <div class="chatbot-avatar">
+              <i class="fa-solid fa-utensils text-danger"></i>
+            </div>
+            <div>
+              <h5 class="mb-0 fw-bold text-white">MamaCare Nutrition AI</h5>
+              <span class="text-white-50 small"><span class="status-dot"></span> Customized Pregnancy Meal Planning</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-light rounded-pill px-3" id="clearMealChatBtn" title="Clear Conversation">
+            <i class="fa-solid fa-rotate-right me-1"></i> New Plan
+          </button>
+        </div>
+
+        <!-- Quick Prompt Suggestion Pills -->
+        <div class="meal-chat-prompts p-2 bg-light border-bottom">
+          <div class="d-flex flex-wrap gap-2">
+            <span class="meal-prompt-pill" data-prompt="Please generate a complete 5-meal daily pregnancy meal plan tailored to my dietary profile.">
+              🍱 Full 5-Meal Plan
+            </span>
+            <span class="meal-prompt-pill" data-prompt="What are healthy, high-iron lunch ideas with high absorption?">
+              🥗 High-Iron Lunches
+            </span>
+            <span class="meal-prompt-pill" data-prompt="Suggest light breakfast and snack options to soothe morning sickness nausea.">
+              🍋 Nausea Relief Meals
+            </span>
+            <span class="meal-prompt-pill" data-prompt="What are high-calcium snack ideas for baby's bone development?">
+              🥛 Calcium Snacks
+            </span>
+            <span class="meal-prompt-pill" data-prompt="What are easy dinner ideas that prevent nighttime heartburn and acid reflux?">
+              🍲 Heartburn-Safe Dinners
+            </span>
+            <span class="meal-prompt-pill" data-prompt="Give me a healthy hydration and fluid timing schedule for pregnancy.">
+              💧 Hydration Schedule
+            </span>
+          </div>
+        </div>
+
+        <!-- Chat Messages Thread -->
+        <div class="meal-chat-messages" id="mealChatMessages">
+          <!-- Welcome Message -->
+          <div class="chat-message bot-message">
+            <div class="message-avatar">
+              <i class="fa-solid fa-carrot"></i>
+            </div>
+            <div class="message-content">
+              <p class="mb-2">Hello! 👋 Welcome to your <strong>MamaCare Smart Nutrition Assistant</strong>.</p>
+              <p class="mb-2">I can craft wholesome, trimester-tailored meal ideas, snacks, and hydration routines matching your dietary preference (<strong>{{ prefs.dietary_preference }}</strong>) and trimester (<strong>Trimester {{ prefs.trimester }}</strong>).</p>
+              <p class="mb-0 small text-muted">Click any prompt above or type a request below to get started! 🌸</p>
+              <span class="message-time">Just now</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div id="mealChatTyping" class="chatbot-typing d-none">
+          <div class="typing-bubble">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+          <span class="small text-muted ms-2">MamaCare Nutrition AI is preparing your meal recommendations...</span>
+        </div>
+
+        <!-- Chat Input Form -->
+        <form id="mealChatForm" class="meal-chat-input-area">
+          <div class="input-group">
+            <input type="text" id="mealChatInput" class="form-control chatbot-input" placeholder="Ask for breakfast ideas, high-protein snacks, hydration..." autocomplete="off" maxlength="500">
+            <button type="submit" class="btn btn-mamacare-chat px-4" id="mealChatSendBtn">
+              <i class="fa-solid fa-paper-plane me-1"></i> Send
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('mealChatForm');
+  const input = document.getElementById('mealChatInput');
+  const container = document.getElementById('mealChatMessages');
+  const typing = document.getElementById('mealChatTyping');
+  const clearBtn = document.getElementById('clearMealChatBtn');
+  const promptPills = document.querySelectorAll('.meal-prompt-pill');
+
+  function scrollBottom() {
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function formatText(text) {
+    if (!text) return '';
+    let esc = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    esc = esc.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    esc = esc.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    esc = esc.replace(/^### (.*$)/gim, '<h6 class="fw-bold text-dark mt-2 mb-1">$1</h6>');
+    esc = esc.replace(/^> (.*$)/gim, '<blockquote class="border-start border-3 border-danger ps-2 my-1 text-danger small">$1</blockquote>');
+    esc = esc.replace(/\n/g, '<br>');
+    return esc;
+  }
+
+  function appendBotMessage(replyText, mealItems = [], hasCondition = false, links = []) {
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const div = document.createElement('div');
+    div.className = 'chat-message bot-message';
+
+    let mealCardsHtml = '';
+    if (mealItems && mealItems.length > 0) {
+      mealCardsHtml = '<div class="mt-3 p-2 bg-white rounded-3 border"><h6 class="small fw-bold text-dark mb-2"><i class="fa-solid fa-bell text-warning me-1"></i> Quick Schedule into Meal Reminders:</h6><div class="row g-2">';
+      mealItems.forEach(item => {
+        mealCardsHtml += `
+          <div class="col-sm-6">
+            <div class="p-2 bg-light rounded-2 border d-flex justify-content-between align-items-center">
+              <div class="pe-2">
+                <span class="badge bg-secondary x-small">${item.meal_type} (${item.time})</span>
+                <div class="fw-bold small text-dark text-truncate" style="max-width: 170px;">${item.meal_name}</div>
+              </div>
+              <button type="button" class="btn btn-xs btn-mamacare add-to-reminders-btn flex-shrink-0" data-name="${item.meal_name}" data-type="${item.meal_type}" data-time="${item.time}" data-notes="${item.notes || ''}">
+                <i class="fa-solid fa-plus"></i> Add
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      mealCardsHtml += '</div></div>';
+    }
+
+    let linksHtml = '';
+    if (links && links.length > 0) {
+      linksHtml = '<div class="mt-2 d-flex flex-wrap gap-1">';
+      links.forEach(l => {
+        linksHtml += `<a href="${l.url}" class="chat-link-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${l.title}</a>`;
+      });
+      linksHtml += '</div>';
+    }
+
+    div.innerHTML = `
+      <div class="message-avatar">
+        <i class="fa-solid fa-carrot"></i>
+      </div>
+      <div class="message-content" style="max-width: 92%;">
+        <div class="mb-0">${formatText(replyText)}</div>
+        ${mealCardsHtml}
+        ${linksHtml}
+        <span class="message-time">${timeStr}</span>
+      </div>
+    `;
+
+    container.appendChild(div);
+    bindAddToReminderBtns();
+    scrollBottom();
+  }
+
+  function appendUserMessage(text) {
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const div = document.createElement('div');
+    div.className = 'chat-message user-message';
+    div.innerHTML = `
+      <div class="message-content">
+        <p class="mb-0">${formatText(text)}</p>
+        <span class="message-time">${timeStr}</span>
+      </div>
+    `;
+    container.appendChild(div);
+    scrollBottom();
+  }
+
+  async function sendMessage(text) {
+    const msg = text.trim();
+    if (!msg) return;
+    if (input) input.value = '';
+
+    appendUserMessage(msg);
+    if (typing) typing.classList.remove('d-none');
+    scrollBottom();
+
+    // Collect current profile form values
+    const prefs = {
+      trimester: document.getElementById('prefTrimester')?.value || 2,
+      pregnancy_week: document.getElementById('prefWeek')?.value || 20,
+      dietary_preference: document.getElementById('prefDietStyle')?.value || 'Vegetarian',
+      allergies: document.getElementById('prefAllergies')?.value || 'None',
+      dietary_restrictions: document.getElementById('prefRestrictions')?.value || 'None',
+      foods_usually_eaten: document.getElementById('prefUsualFoods')?.value || '',
+      medical_conditions: document.getElementById('prefConditions')?.value || 'None'
+    };
+
+    try {
+      const res = await fetch('/api/meal-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg, preferences: prefs })
+      });
+      const data = await res.json();
+      if (typing) typing.classList.add('d-none');
+
+      if (res.ok && data.success) {
+        appendBotMessage(data.reply, data.meal_items, data.has_condition_alert, data.links);
+      } else {
+        appendBotMessage("I apologize, I had trouble processing your meal request. Please try asking again in a moment. 🌸");
+      }
+    } catch (e) {
+      if (typing) typing.classList.add('d-none');
+      appendBotMessage("Network connection interrupted. Please check your connection and try again. 🌸");
+    }
+  }
+
+  function bindAddToReminderBtns() {
+    document.querySelectorAll('.add-to-reminders-btn').forEach(btn => {
+      btn.onclick = async (e) => {
+        const targetBtn = e.currentTarget;
+        const name = targetBtn.getAttribute('data-name');
+        const type = targetBtn.getAttribute('data-type');
+        const time = targetBtn.getAttribute('data-time');
+        const notes = targetBtn.getAttribute('data-notes');
+
+        targetBtn.disabled = true;
+        targetBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+        try {
+          const res = await fetch('/api/reminders/add-from-chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ meal_name: name, meal_type: type, reminder_time: time, notes: notes })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            targetBtn.className = 'btn btn-xs btn-success';
+            targetBtn.innerHTML = '<i class="fa-solid fa-check"></i> Added';
+          } else {
+            targetBtn.disabled = false;
+            targetBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add';
+          }
+        } catch (err) {
+          targetBtn.disabled = false;
+          targetBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add';
+        }
+      };
+    });
+  }
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input) sendMessage(input.value);
+    });
+  }
+
+  promptPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const prompt = pill.getAttribute('data-prompt');
+      if (prompt) sendMessage(prompt);
+    });
+  });
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      container.innerHTML = `
+        <div class="chat-message bot-message">
+          <div class="message-avatar">
+            <i class="fa-solid fa-carrot"></i>
+          </div>
+          <div class="message-content">
+            <p class="mb-2">Hello! 👋 Conversation reset. How can I assist you with your pregnancy meal planning and nutrition today?</p>
+            <span class="message-time">Just now</span>
+          </div>
+        </div>
+      `;
+    });
+  }
+});
+</script>
+{% endblock %}

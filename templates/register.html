@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Join MamaCare – Create Your Account{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="dash-card shadow-md">
+        <div class="dash-header text-center bg-white border-bottom-0 pb-0">
+          <h3 class="fw-bold text-dark mb-1">Create Your Account</h3>
+          <p class="small text-muted">Personalize your pregnancy monitoring and reminders</p>
+        </div>
+        <div class="dash-body">
+          <form action="{{ url_for('register') }}" method="POST">
+            <div class="row g-2 mb-3">
+              <div class="col-12">
+                <label class="form-label small fw-bold">Full Name: <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="name" placeholder="Sarah Johnson" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Email Address: <span class="text-danger">*</span></label>
+              <input type="email" class="form-control" name="email" placeholder="sarah@example.com" required>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Password: <span class="text-danger">*</span></label>
+                <input type="password" class="form-control" name="password" placeholder="Min 6 chars" required minlength="6">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Confirm Password: <span class="text-danger">*</span></label>
+                <input type="password" class="form-control" name="confirm_password" placeholder="Re-type password" required minlength="6">
+              </div>
+            </div>
+
+            <hr class="my-3 text-muted">
+            <h6 class="fw-bold small text-dark mb-2"><i class="fa-solid fa-baby text-danger me-1"></i> Optional Pregnancy Info</h6>
+
+            <div class="row g-2 mb-3">
+              <div class="col-md-8">
+                <label class="form-label small fw-bold">First Day of Last Period (LMP):</label>
+                <input type="date" class="form-control" name="lmp_date" max="{{ current_year }}-12-31">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold">Blood Group:</label>
+                <select class="form-select" name="blood_group">
+                  <option value="">Select</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+" selected>O+</option>
+                  <option value="O-">O-</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-4">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Emergency Contact Person:</label>
+                <input type="text" class="form-control" name="emergency_contact_name" placeholder="Michael (Partner)">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Emergency Phone:</label>
+                <input type="tel" class="form-control" name="emergency_contact_phone" placeholder="+1 (555) 234-5678">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-mamacare w-100 py-2">Create Account</button>
+          </form>
+
+          <div class="text-center mt-3 small">
+            Already have an account? <a href="{{ url_for('login') }}" class="fw-bold text-danger">Sign In</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

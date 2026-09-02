@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Pregnancy Health Tips & Symptom Relief | MamaCare{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Page Header -->
+  <div class="text-center max-w-700 mx-auto mb-4">
+    <span class="badge bg-pink text-danger px-3 py-2 rounded-pill mb-2 fw-bold" style="background-color: #ffe4e9;">
+      <i class="fa-solid fa-heart-pulse me-1"></i> Daily Wellness
+    </span>
+    <h2 class="fw-bold text-dark">Pregnancy Health & Symptom Management</h2>
+    <p class="text-muted">
+      Evidence-based educational guidance for comfortable sleep, natural symptom relief, and maternal mental well-being.
+    </p>
+  </div>
+
+  <div class="row g-4">
+    <!-- Sleep Optimization Section -->
+    <div class="col-lg-6">
+      <div class="dash-card shadow-sm h-100">
+        <div class="dash-header">
+          <span><i class="fa-solid fa-moon text-primary me-2"></i> {{ health_data.sleep.title }}</span>
+        </div>
+        <div class="dash-body">
+          {% for pt in health_data.sleep.points %}
+          <div class="mb-3 p-3 bg-light rounded-3 border">
+            <h6 class="fw-bold text-dark mb-1"><i class="fa-solid fa-bed text-primary me-1"></i> {{ pt.heading }}</h6>
+            <p class="small text-muted mb-0">{{ pt.detail }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Mental Health & Emotional Care -->
+    <div class="col-lg-6">
+      <div class="dash-card shadow-sm h-100">
+        <div class="dash-header">
+          <span><i class="fa-solid fa-brain text-purple me-2"></i> {{ health_data.mental_health.title }}</span>
+        </div>
+        <div class="dash-body">
+          <ul class="list-unstyled">
+            {% for item in health_data.mental_health.points %}
+            <li class="d-flex align-items-start mb-3 small text-dark">
+              <i class="fa-solid fa-heart text-danger mt-1 me-2 flex-shrink-0"></i>
+              <span>{{ item }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <div class="p-3 bg-white border border-info rounded-3 text-center mt-4">
+            <h6 class="fw-bold text-info mb-1"><i class="fa-solid fa-spa me-1"></i> 2-Minute Box Breathing Technique</h6>
+            <p class="small text-muted mb-0">Inhale for 4 seconds • Hold for 4 seconds • Exhale for 4 seconds • Hold for 4 seconds. Repeat 4 times.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Common Symptoms & Solutions Table -->
+    <div class="col-12">
+      <div class="dash-card shadow-sm">
+        <div class="dash-header">
+          <span><i class="fa-solid fa-kit-medical text-danger me-2"></i> Managing Common Pregnancy Discomforts</span>
+        </div>
+        <div class="dash-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 small">
+              <thead class="table-light">
+                <tr>
+                  <th style="width: 30%;">Common Symptom</th>
+                  <th style="width: 70%;">Natural & Evidence-Based Relief Strategies</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in health_data.symptoms %}
+                <tr>
+                  <td class="fw-bold text-dark">{{ item.symptom }}</td>
+                  <td class="text-muted">{{ item.remedy }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

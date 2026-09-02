@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Due Date Calculator – Naegele's Rule | MamaCare{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Page Header -->
+  <div class="text-center max-w-700 mx-auto mb-4">
+    <span class="badge bg-pink text-danger px-3 py-2 rounded-pill mb-2 fw-bold" style="background-color: #ffe4e9;">
+      <i class="fa-solid fa-calculator me-1"></i> Clinical Estimator
+    </span>
+    <h2 class="fw-bold text-dark">Pregnancy Due Date Calculator</h2>
+    <p class="text-muted">
+      Calculate your Estimated Due Date (EDD), estimated conception date, and current gestational progress using <strong>Naegele's Rule</strong>.
+    </p>
+  </div>
+
+  <div class="row g-4 justify-content-center">
+    <!-- Input Form Column -->
+    <div class="col-lg-5">
+      <div class="dash-card shadow-sm h-100">
+        <div class="dash-header">
+          <span><i class="fa-solid fa-calendar-plus text-danger me-2"></i> Enter Pregnancy Details</span>
+        </div>
+        <div class="dash-body">
+          <form action="{{ url_for('calculator') }}" method="POST">
+            <div class="mb-3">
+              <label for="lmp_date" class="form-label fw-bold small text-dark">First Day of Last Menstrual Period (LMP): <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="lmp_date" name="lmp_date" value="{{ input_lmp or '' }}" required max="{{ current_year }}-12-31">
+              <div class="form-text small">Select the first day your last menstrual bleeding started.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="cycle_length" class="form-label fw-bold small text-dark">Average Menstrual Cycle Length: <span class="text-danger">*</span></label>
+              <select class="form-select" id="cycle_length" name="cycle_length">
+                <option value="21" {% if cycle_length == 21 %}selected{% endif %}>21 Days</option>
+                <option value="24" {% if cycle_length == 24 %}selected{% endif %}>24 Days</option>
+                <option value="26" {% if cycle_length == 26 %}selected{% endif %}>26 Days</option>
+                <option value="28" {% if not cycle_length or cycle_length == 28 %}selected{% endif %}>28 Days (Standard Regular Cycle)</option>
+                <option value="30" {% if cycle_length == 30 %}selected{% endif %}>30 Days</option>
+                <option value="32" {% if cycle_length == 32 %}selected{% endif %}>32 Days</option>
+                <option value="35" {% if cycle_length == 35 %}selected{% endif %}>35 Days</option>
+              </select>
+              <div class="form-text small">Normal menstrual cycles typically range between 21 and 35 days.</div>
+            </div>
+
+            {% if current_user %}
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" name="save_to_profile" value="yes" id="saveProfileCheck" checked>
+              <label class="form-check-label small text-muted" for="saveProfileCheck">
+                Save this LMP & Due Date to my MamaCare user profile
+              </label>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-mamacare w-100 py-2">
+              <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Calculate Estimated Due Date
+            </button>
+          </form>
+
+          <!-- Naegele Formula Explanatory Box -->
+          <div class="mt-4 p-3 rounded-3 bg-light border">
+            <h6 class="fw-bold small text-dark mb-1"><i class="fa-solid fa-circle-info text-primary me-1"></i> How Naegele's Rule Works</h6>
+            <p class="small text-muted mb-0">
+              Naegele's rule calculates due date by adding 1 year, subtracting 3 months, and adding 7 days to the first day of the Last Menstrual Period (LMP) — which equals exactly <strong>280 days (40 weeks)</strong> of gestational development.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Column -->
+    <div class="col-lg-7">
+      {% if result %}
+      <div class="dash-card shadow-md border-danger">
+        <div class="dash-header bg-white">
+          <span class="text-danger fw-bold"><i class="fa-solid fa-sparkles me-2"></i> Calculation Results</span>
+          <span class="badge bg-pink text-danger" style="background-color: #ffe4e9;">{{ result.trimester_name }}</span>
+        </div>
+        <div class="dash-body">
+          <div class="row g-3 text-center mb-4">
+            <div class="col-md-6">
+              <div class="p-3 rounded-4 bg-light border">
+                <div class="small text-muted mb-1">Estimated Delivery Date (EDD)</div>
+                <h3 class="fw-bold text-danger mb-0">{{ result.due_date_formatted }}</h3>
+                <span class="small text-muted">{{ result.days_remaining }} days remaining</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 rounded-4 bg-light border">
+                <div class="small text-muted mb-1">Current Gestational Age</div>
+                <h3 class="fw-bold text-dark mb-0">Week {{ result.current_week }} <small class="fs-6 text-muted">+ {{ result.current_day }} days</small></h3>
+                <span class="small text-muted">{{ result.days_pregnant }} days into pregnancy</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between small fw-bold mb-1">
+              <span>Pregnancy Progress</span>
+              <span>{{ result.progress_pct }}% Completed</span>
+            </div>
+            <div class="pregnancy-progress">
+              <div class="pregnancy-progress-bar text-center text-white small fw-bold" style="width: {{ result.progress_pct }}%;"></div>
+            </div>
+          </div>
+
+          <!-- Baby Size Widget for Calculated Week -->
+          <div class="baby-fruit-box mb-4">
+            <div class="row align-items-center">
+              <div class="col-sm-3 text-center">
+                <div class="baby-emoji">{{ result.week_data.emoji }}</div>
+              </div>
+              <div class="col-sm-9 text-start">
+                <span class="badge bg-primary mb-1">Week {{ result.current_week }} Size Comparison</span>
+                <h4 class="fw-bold text-dark mb-1">Size of a {{ result.week_data.fruit }}</h4>
+                <div class="small text-muted mb-2">
+                  <span class="me-3"><i class="fa-solid fa-ruler-vertical text-secondary me-1"></i> Length: <strong>~{{ result.week_data.length_cm }} cm</strong></span>
+                  <span><i class="fa-solid fa-weight-scale text-secondary me-1"></i> Weight: <strong>~{{ result.week_data.weight_g }} g</strong></span>
+                </div>
+                <p class="small text-muted mb-0">
+                  {{ result.week_data.milestones[0] }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Timeline Details -->
+          <div class="row g-2 small text-muted">
+            <div class="col-6"><i class="fa-solid fa-calendar me-1"></i> Estimated Conception: <strong>{{ result.conception_date }}</strong></div>
+            <div class="col-6"><i class="fa-solid fa-clock-rotate-left me-1"></i> Cycle Length: <strong>{{ result.cycle_length }} Days</strong></div>
+          </div>
+
+          <div class="mt-4 text-center">
+            <a href="{{ url_for('tracker', week=result.current_week) }}" class="btn btn-mamacare">
+              <i class="fa-solid fa-baby me-2"></i> View Full Week {{ result.current_week }} Development Guide
+            </a>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="dash-card text-center p-5">
+        <div class="p-4">
+          <i class="fa-solid fa-calendar-heart text-danger opacity-50 mb-3" style="font-size: 4rem;"></i>
+          <h4 class="fw-bold text-dark">Ready to calculate your due date?</h4>
+          <p class="text-muted max-w-500 mx-auto">
+            Enter your Last Menstrual Period date on the left to see your estimated delivery date, current gestational week, baby size analogy, and trimester milestones.
+          </p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

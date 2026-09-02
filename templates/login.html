@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In | MamaCare{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="dash-card shadow-md">
+        <div class="dash-header text-center bg-white border-bottom-0 pb-0">
+          <h3 class="fw-bold text-dark mb-1">Welcome Back</h3>
+          <p class="small text-muted">Sign in to your MamaCare pregnancy dashboard</p>
+        </div>
+        <div class="dash-body">
+          <form action="{{ url_for('login', next=request.args.get('next')) }}" method="POST">
+            <div class="mb-3">
+              <label for="email" class="form-label small fw-bold">Email Address: <span class="text-danger">*</span></label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label small fw-bold">Password: <span class="text-danger">*</span></label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn btn-mamacare w-100 py-2 mb-3">Sign In</button>
+          </form>
+
+          <div class="p-3 bg-light rounded text-center small">
+            <strong>Demo Evaluation Account:</strong><br>
+            Email: <code>sarah@example.com</code><br>
+            Password: <code>password123</code>
+          </div>
+
+          <div class="text-center mt-3 small">
+            Don't have an account yet? <a href="{{ url_for('register') }}" class="fw-bold text-danger">Register for Free</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

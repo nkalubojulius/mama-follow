@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}MamaCare – Caring for You and Your Baby Every Step of the Way{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center text-lg-start">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <span class="hero-badge"><i class="fa-solid fa-sparkles me-1"></i> Your Trusted Pregnancy Companion</span>
+        <h1 class="hero-title mb-3">
+          Nurturing Every Moment of <span>Your Pregnancy Journey</span>
+        </h1>
+        <p class="lead text-muted mb-4">
+          Calculate your accurate due date with clinical precision, explore 40 weeks of fetal development, track doctor visits, and access evidence-based nutrition & safe exercise guidance.
+        </p>
+
+        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+          <a href="{{ url_for('calculator') }}" class="btn btn-mamacare btn-lg">
+            <i class="fa-solid fa-calculator me-2"></i> Calculate Due Date
+          </a>
+          <a href="{{ url_for('tracker') }}" class="btn btn-outline-mamacare btn-lg">
+            <i class="fa-solid fa-baby me-2"></i> Week-by-Week Tracker
+          </a>
+        </div>
+
+        {% if user_metrics %}
+        <!-- Personalized User Pregnancy Progress Bar in Hero -->
+        <div class="mt-4 p-3 bg-white rounded-4 shadow-sm border">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-bold text-dark"><i class="fa-solid fa-heart text-danger me-1"></i> {{ current_user.name }}'s Progress: <strong>Week {{ user_metrics.current_week }} (Day {{ user_metrics.current_day }})</strong></span>
+            <span class="badge bg-primary rounded-pill">{{ user_metrics.trimester_name }}</span>
+          </div>
+          <div class="pregnancy-progress mb-2">
+            <div class="pregnancy-progress-bar text-center text-white small fw-bold" style="width: {{ user_metrics.progress_pct }}%;">
+              {{ user_metrics.progress_pct }}%
+            </div>
+          </div>
+          <div class="d-flex justify-content-between small text-muted">
+            <span>Baby is the size of a <strong>{{ user_metrics.week_data.fruit }}</strong> {{ user_metrics.week_data.emoji }}</span>
+            <span><strong>{{ user_metrics.days_remaining }} days</strong> to due date ({{ user_metrics.due_date_formatted }})</span>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="col-lg-5 text-center">
+        <!-- Quick Due Date Calculator Widget Box -->
+        <div class="dash-card shadow-md text-start">
+          <div class="dash-header bg-white border-bottom-0 pb-0">
+            <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-calendar-day text-danger me-2"></i> Quick Due Date Estimator</h5>
+          </div>
+          <div class="dash-body">
+            <p class="small text-muted mb-3">Enter the first day of your Last Menstrual Period (LMP) to calculate your estimated delivery date using Naegele's Rule.</p>
+            <form action="{{ url_for('calculator') }}" method="POST">
+              <div class="mb-3">
+                <label for="quick_lmp" class="form-label small fw-bold">First Day of Last Period (LMP):</label>
+                <input type="date" class="form-control" id="quick_lmp" name="lmp_date" required max="{{ current_year }}-12-31">
+              </div>
+              <div class="mb-3">
+                <label for="quick_cycle" class="form-label small fw-bold">Average Cycle Length (Days):</label>
+                <select class="form-select" id="quick_cycle" name="cycle_length">
+                  <option value="28" selected>28 Days (Standard)</option>
+                  <option value="26">26 Days</option>
+                  <option value="27">27 Days</option>
+                  <option value="29">29 Days</option>
+                  <option value="30">30 Days</option>
+                  <option value="32">32 Days</option>
+                  <option value="35">35 Days</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-mamacare w-100 py-2">
+                <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Calculate My Due Date
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Core Features Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center max-w-700 mx-auto mb-5">
+      <span class="badge bg-pink text-danger px-3 py-2 rounded-pill mb-2 fw-bold" style="background-color: #ffe4e9;">Comprehensive Support</span>
+      <h2 class="fw-bold text-dark">Everything You Need for a Healthy Pregnancy</h2>
+      <p class="text-muted">Explore medical-grade pregnancy calculators, week-by-week development guides, nutritional blueprints, and personalized reminder management.</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Feature 1: Due Date Calculator -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon icon-pink">
+            <i class="fa-solid fa-calculator"></i>
+          </div>
+          <h5 class="fw-bold text-dark">Naegele Due Date Calculator</h5>
+          <p class="text-muted small flex-grow-1">
+            Calculate your Estimated Due Date (EDD) using the standard clinical formula (LMP + 280 days), adjusted for your personal menstrual cycle length.
+          </p>
+          <a href="{{ url_for('calculator') }}" class="text-decoration-none fw-bold text-danger small">
+            Calculate Now <i class="fa-solid fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Feature 2: Week Tracker -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon icon-teal">
+            <i class="fa-solid fa-baby"></i>
+          </div>
+          <h5 class="fw-bold text-dark">40-Week Pregnancy Tracker</h5>
+          <p class="text-muted small flex-grow-1">
+            Track baby size with relatable fruit analogies, explore key organogenesis milestones, and learn how your maternal body changes week by week.
+          </p>
+          <a href="{{ url_for('tracker') }}" class="text-decoration-none fw-bold text-success small">
+            Explore 40 Weeks <i class="fa-solid fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Feature 3: Nutrition Guide -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon icon-orange">
+            <i class="fa-solid fa-apple-whole"></i>
+          </div>
+          <h5 class="fw-bold text-dark">Trimester Nutrition & Hydration</h5>
+          <p class="text-muted small flex-grow-1">
+            Evidence-based nutritional requirements for Folic Acid, Iron, Calcium, and DHA. Includes dangerous foods to avoid and an interactive daily water tracker.
+          </p>
+          <a href="{{ url_for('nutrition') }}" class="text-decoration-none fw-bold text-warning small">
+            View Nutrition Guide <i class="fa-solid fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Feature 4: Exercise & Kegel -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon icon-purple">
+            <i class="fa-solid fa-person-walking"></i>
+          </div>
+          <h5 class="fw-bold text-dark">Safe Exercise & Kegel Trainer</h5>
+          <p class="text-muted small flex-grow-1">
+            Trimester-specific low-impact workouts, labor prep stretches, and an interactive animated Pelvic Floor (Kegel) trainer with audio-visual cues.
+          </p>
+          <a href="{{ url_for('exercise') }}" class="text-decoration-none fw-bold text-purple small">
+            Start Workout & Kegel <i class="fa-solid fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Feature 5: Clinical Reminders -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon icon-blue">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+          <h5 class="fw-bold text-dark">Appointment & Medicine Alerts</h5>
+          <p class="text-muted small flex-grow-1">
+            Never miss an ultrasound scan or prenatal vitamin dose. Store doctor appointments, clinic notes, and daily medication schedules with one-tap logging.
+          </p>
+          <a href="{{ url_for('appointments') }}" class="text-decoration-none fw-bold text-info small">
+            Manage Reminders <i class="fa-solid fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Feature 6: Danger Signs & Emergency -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon icon-red">
+            <i class="fa-solid fa-truck-medical"></i>
+          </div>
+          <h5 class="fw-bold text-dark">Red-Flag Symptoms & Emergency</h5>
+          <p class="text-muted small flex-grow-1">
+            Clear guidelines on when to seek immediate medical attention (preeclampsia, bleeding, reduced movement), emergency hotlines, and hospital bag checklist.
+          </p>
+          <a href="{{ url_for('emergency') }}" class="text-decoration-none fw-bold text-danger small">
+            Emergency Guidelines <i class="fa-solid fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="py-5 bg-white border-top border-bottom">
+  <div class="container text-center py-4">
+    <h3 class="fw-bold text-dark mb-3">Begin Your Safe & Informed Pregnancy Journey Today</h3>
+    <p class="text-muted mb-4 max-w-600 mx-auto">Join MamaCare to personalize your gestational milestones, organize appointments, and access clinical wellness tools.</p>
+    {% if not current_user %}
+    <a href="{{ url_for('register') }}" class="btn btn-mamacare btn-lg px-4 me-2">Create Free Account</a>
+    <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg px-4">Sign In</a>
+    {% else %}
+    <a href="{{ url_for('profile') }}" class="btn btn-mamacare btn-lg px-4">Go to My Dashboard</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,928 @@
+/* MamaCare - Modern Pregnancy Care & Monitoring UI */
+:root {
+  --primary-pink: #ff6b8b;
+  --primary-gradient: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+  --secondary-teal: #20c997;
+  --secondary-gradient: linear-gradient(135deg, #0dcaf0 0%, #20c997 100%);
+  --accent-purple: #7952b3;
+  --bg-soft: #fcf9fa;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --text-dark: #2d3748;
+  --text-muted: #718096;
+  --border-soft: #edf2f7;
+  --trimester-1: #4facfe;
+  --trimester-2: #ff758c;
+  --trimester-3: #43e97b;
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 10px 15px -3px rgba(255, 107, 139, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(255, 107, 139, 0.18), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  background-color: var(--bg-soft);
+  color: var(--text-dark);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+/* Navbar */
+.navbar-mamacare {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #f1e2e6;
+  padding: 0.8rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.brand-logo {
+  font-weight: 800;
+  font-size: 1.5rem;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-link {
+  font-weight: 500;
+  color: #4a5568 !important;
+  padding: 0.5rem 0.9rem !important;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--primary-pink) !important;
+  background-color: rgba(255, 107, 139, 0.08);
+}
+
+.btn-mamacare {
+  background: var(--primary-gradient);
+  color: white !important;
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  padding: 0.6rem 1.4rem;
+  box-shadow: 0 4px 12px rgba(255, 107, 139, 0.35);
+  transition: all 0.25s ease;
+}
+
+.btn-mamacare:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255, 107, 139, 0.45);
+  color: white !important;
+}
+
+.btn-outline-mamacare {
+  border: 2px solid var(--primary-pink);
+  color: var(--primary-pink) !important;
+  font-weight: 600;
+  border-radius: 30px;
+  padding: 0.5rem 1.3rem;
+  background: transparent;
+  transition: all 0.25s ease;
+}
+
+.btn-outline-mamacare:hover {
+  background: var(--primary-pink);
+  color: white !important;
+  transform: translateY(-2px);
+}
+
+/* Medical Disclaimer Banner */
+.disclaimer-banner {
+  background: #fff8e1;
+  border-bottom: 1px solid #ffe082;
+  color: #856404;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #fff0f3 0%, #f7f0fa 50%, #e8f5e9 100%);
+  padding: 4.5rem 1rem 3.5rem;
+  border-radius: 0 0 40px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #1a202c;
+  line-height: 1.2;
+}
+
+.hero-title span {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255, 107, 139, 0.12);
+  color: var(--primary-pink);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+/* Feature Cards */
+.feature-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #f0f0f0;
+  padding: 2rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: #ffd1dc;
+}
+
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  margin-bottom: 1.25rem;
+}
+
+.icon-pink { background: rgba(255, 107, 139, 0.15); color: #ff6b8b; }
+.icon-teal { background: rgba(32, 201, 151, 0.15); color: #20c997; }
+.icon-purple { background: rgba(121, 82, 179, 0.15); color: #7952b3; }
+.icon-orange { background: rgba(253, 126, 20, 0.15); color: #fd7e14; }
+.icon-blue { background: rgba(13, 202, 240, 0.15); color: #0dcaf0; }
+.icon-red { background: rgba(220, 53, 69, 0.15); color: #dc3545; }
+
+/* Dashboard Cards */
+.dash-card {
+  background: white;
+  border-radius: 18px;
+  border: 1px solid #f1f3f5;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.dash-header {
+  padding: 1.2rem 1.5rem;
+  background: #fafbfc;
+  border-bottom: 1px solid #edf2f7;
+  font-weight: 700;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dash-body {
+  padding: 1.5rem;
+}
+
+/* Progress bar styled */
+.pregnancy-progress {
+  height: 18px;
+  border-radius: 12px;
+  background-color: #f1f3f5;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.pregnancy-progress-bar {
+  background: var(--primary-gradient);
+  transition: width 1s ease-in-out;
+  border-radius: 12px;
+}
+
+/* Week Tracker Fruit Card */
+.baby-fruit-box {
+  background: linear-gradient(135deg, #fff5f7 0%, #fff 100%);
+  border: 2px dashed #ffb6c1;
+  border-radius: 24px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.baby-emoji {
+  font-size: 4.5rem;
+  filter: drop-shadow(0 8px 12px rgba(0,0,0,0.1));
+  display: inline-block;
+  animation: floatEmoji 3s ease-in-out infinite;
+}
+
+@keyframes floatEmoji {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Trimester Badges */
+.badge-t1 { background: #e3f2fd; color: #1976d2; font-weight: 600; border-radius: 8px; padding: 6px 12px; }
+.badge-t2 { background: #fce4ec; color: #c2185b; font-weight: 600; border-radius: 8px; padding: 6px 12px; }
+.badge-t3 { background: #e8f5e9; color: #2e7d32; font-weight: 600; border-radius: 8px; padding: 6px 12px; }
+
+/* Interactive Kegel Ring */
+.kegel-container {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.kegel-ring {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 8px solid #ffb6c1;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  box-shadow: 0 10px 25px rgba(255, 107, 139, 0.2);
+  transition: transform 0.8s ease, border-color 0.5s ease;
+}
+
+.kegel-ring.contract {
+  transform: scale(1.15);
+  border-color: #ff4757;
+  background: #fff0f3;
+}
+
+.kegel-ring.relax {
+  transform: scale(0.9);
+  border-color: #2ed573;
+  background: #f0fff4;
+}
+
+.kegel-seconds {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--primary-pink);
+  line-height: 1;
+}
+
+.kegel-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Water Tracker Glasses */
+.water-glass-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.water-glass-btn {
+  aspect-ratio: 1;
+  border-radius: 16px;
+  border: 2px solid #b3e5fc;
+  background: #f0f9ff;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.water-glass-btn.drank {
+  background: linear-gradient(135deg, #0288d1 0%, #29b6f6 100%);
+  border-color: #0288d1;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+}
+
+/* Danger Box */
+.emergency-card {
+  background: #fff5f5;
+  border-left: 5px solid #e53e3e;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+/* Footer */
+footer {
+  background: #1a202c;
+  color: #cbd5e0;
+  padding: 3.5rem 1rem 1.5rem;
+  margin-top: 4rem;
+}
+
+footer a {
+  color: #a0aec0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+footer a:hover {
+  color: var(--primary-pink);
+}
+
+.footer-bottom {
+  border-top: 1px solid #2d3748;
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+/* Form Styles */
+.form-control, .form-select {
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 0.65rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-pink);
+  box-shadow: 0 0 0 3px rgba(255, 107, 139, 0.2);
+}
+
+/* =========================================================
+   MAMACARE AI CHATBOT WIDGET STYLES
+   ========================================================= */
+
+/* Floating Launcher Button */
+.chatbot-launcher-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1060;
+}
+
+.chatbot-toggle-btn {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(255, 107, 139, 0.42);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
+}
+
+.chatbot-toggle-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 30px rgba(255, 107, 139, 0.55);
+}
+
+.chatbot-toggle-btn:active {
+  transform: scale(0.96);
+}
+
+.chatbot-btn-pulse {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 107, 139, 0.6);
+  animation: pulse-ring 2.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+  pointer-events: none;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 0; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+.chatbot-tooltip {
+  position: absolute;
+  right: 74px;
+  background: #2d3748;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.chatbot-launcher-container:hover .chatbot-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Chatbot Popup Window */
+.chatbot-window {
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  width: 385px;
+  height: 570px;
+  max-height: calc(100vh - 120px);
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(255, 107, 139, 0.08);
+  border: 1px solid rgba(255, 117, 140, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1055;
+  animation: chatbotSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes chatbotSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Chat Header */
+.chatbot-header {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.chatbot-avatar {
+  width: 38px;
+  height: 38px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chatbot-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  letter-spacing: 0.2px;
+}
+
+.chatbot-status {
+  font-size: 0.74rem;
+  opacity: 0.92;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  background: #20c997;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 6px #20c997;
+}
+
+.chatbot-ctrl-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s ease;
+}
+
+.chatbot-ctrl-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Medical Disclaimer Banner */
+.chatbot-disclaimer {
+  background: #fff8f9;
+  border-bottom: 1px solid #ffe6eb;
+  padding: 6px 14px;
+  font-size: 0.74rem;
+  color: #718096;
+  line-height: 1.3;
+}
+
+/* Chat Messages Container */
+.chatbot-messages {
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #fafafa;
+  scroll-behavior: smooth;
+}
+
+.chatbot-messages::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+/* Message Styles */
+.chat-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: 90%;
+  animation: messageFadeIn 0.25s ease forwards;
+}
+
+@keyframes messageFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.bot-message {
+  align-self: flex-start;
+}
+
+.user-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ffe3e8;
+  color: var(--primary-pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.message-content {
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.bot-message .message-content {
+  background: #ffffff;
+  color: var(--text-dark);
+  border: 1px solid #edf2f7;
+  border-top-left-radius: 4px;
+}
+
+.user-message .message-content {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border-top-right-radius: 4px;
+}
+
+.message-time {
+  display: block;
+  font-size: 0.68rem;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+
+.user-message .message-time {
+  text-align: right;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Emergency Alert Message Box in Chat */
+.emergency-bot-bubble {
+  background: #fff5f5 !important;
+  border: 1px solid #feb2b2 !important;
+  border-left: 4px solid #e53e3e !important;
+}
+
+.chat-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  margin-right: 6px;
+  background: #f7fafc;
+  color: var(--primary-pink);
+  border: 1px solid #cbd5e0;
+  border-radius: 14px;
+  padding: 3px 10px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.chat-link-btn:hover {
+  background: var(--primary-pink);
+  color: #ffffff;
+  border-color: var(--primary-pink);
+}
+
+/* Quick Prompt Suggestion Chips */
+.chatbot-quick-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.prompt-chip {
+  background: #ffffff;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+  padding: 5px 11px;
+  border-radius: 16px;
+  font-size: 0.76rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.prompt-chip:hover {
+  background: #ffebee;
+  color: var(--primary-pink);
+  border-color: #ffccd5;
+  transform: translateY(-1px);
+}
+
+/* Typing Indicator Animation */
+.chatbot-typing {
+  padding: 6px 14px;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+}
+
+.typing-bubble {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.typing-bubble .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--primary-pink);
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.typing-bubble .dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-bubble .dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* Chat Input Form */
+.chatbot-input-area {
+  padding: 10px 12px;
+  background: #ffffff;
+  border-top: 1px solid #edf2f7;
+}
+
+.chatbot-input {
+  border-radius: 20px 0 0 20px !important;
+  font-size: 0.88rem;
+  border: 1px solid #e2e8f0;
+  padding: 8px 14px;
+}
+
+.chatbot-input:focus {
+  border-color: var(--primary-pink);
+  box-shadow: none;
+}
+
+.btn-mamacare-chat {
+  background: var(--primary-gradient);
+  color: #ffffff !important;
+  border: none;
+  border-radius: 0 20px 20px 0 !important;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  transition: opacity 0.2s ease;
+}
+
+.btn-mamacare-chat:hover {
+  opacity: 0.92;
+}
+
+/* Responsive adjustments for Mobile */
+@media (max-width: 768px) {
+  .hero-title { font-size: 2.1rem; }
+  .water-glass-grid { grid-template-columns: repeat(4, 1fr); }
+  
+  .chatbot-window {
+    bottom: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+  }
+  
+  .chatbot-launcher-container {
+    bottom: 18px;
+    right: 18px;
+  }
+}
+
+/* =========================================================
+   SMART MEAL CHAT & MEAL REMINDER STYLES
+   ========================================================= */
+
+/* Dedicated Meal Chat Container */
+.meal-chat-container {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #edf2f7;
+  display: flex;
+  flex-direction: column;
+  height: 680px;
+  overflow: hidden;
+}
+
+.meal-chat-header {
+  background: var(--primary-gradient);
+  padding: 16px 20px;
+  color: #ffffff;
+}
+
+.meal-chat-prompts {
+  background: #fdf2f4;
+  border-bottom: 1px solid #fee2e7;
+}
+
+.meal-prompt-pill {
+  background: #ffffff;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.meal-prompt-pill:hover {
+  background: #ffebee;
+  color: var(--primary-pink);
+  border-color: #ffccd5;
+  transform: translateY(-1px);
+}
+
+.meal-chat-messages {
+  flex: 1;
+  padding: 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #fafafa;
+  scroll-behavior: smooth;
+}
+
+.meal-chat-input-area {
+  padding: 14px 18px;
+  background: #ffffff;
+  border-top: 1px solid #edf2f7;
+}
+
+/* Meal Type Icon Box */
+.meal-type-icon-box {
+  width: 48px;
+  height: 48px;
+  background: #fff5f7;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border: 1px solid #ffe3e8;
+}
+
+/* Small Buttons */
+.btn-xs {
+  padding: 3px 8px;
+  font-size: 0.74rem;
+  border-radius: 6px;
+}
+
+.x-small {
+  font-size: 0.72rem;
+}
+
+/* On-Screen Meal Alarm Notification Toast */
+.meal-alarm-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(255, 107, 139, 0.15);
+  border-left: 5px solid #ff4757;
+  z-index: 1090;
+  animation: alarmSlideDown 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+}
+
+@keyframes alarmSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.meal-alarm-content {
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+}
+
+.meal-alarm-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff8e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.meal-alarm-body {
+  flex: 1;
+}
+
+.meal-alarm-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.75rem;
+}
+

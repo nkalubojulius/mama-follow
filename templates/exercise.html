@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Pregnancy Exercise & Kegel Trainer | MamaCare{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Page Header -->
+  <div class="text-center max-w-700 mx-auto mb-4">
+    <span class="badge bg-pink text-danger px-3 py-2 rounded-pill mb-2 fw-bold" style="background-color: #ffe4e9;">
+      <i class="fa-solid fa-person-walking me-1"></i> Maternal Fitness & Wellness
+    </span>
+    <h2 class="fw-bold text-dark">Safe Pregnancy Exercise & Kegel Guide</h2>
+    <p class="text-muted">
+      Maintain physical stamina, prepare pelvic muscles for labor, and practice safe trimester-appropriate fitness routines.
+    </p>
+  </div>
+
+  <!-- Trimester Tabs -->
+  <ul class="nav nav-pills justify-content-center mb-4 gap-2">
+    <li class="nav-item">
+      <a class="nav-link {% if selected_trimester == 1 %}active bg-danger text-white{% else %}bg-light text-dark{% endif %}" href="{{ url_for('exercise', trimester=1) }}">
+        Trimester 1 Workouts
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if selected_trimester == 2 %}active bg-danger text-white{% else %}bg-light text-dark{% endif %}" href="{{ url_for('exercise', trimester=2) }}">
+        Trimester 2 Workouts
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if selected_trimester == 3 %}active bg-danger text-white{% else %}bg-light text-dark{% endif %}" href="{{ url_for('exercise', trimester=3) }}">
+        Trimester 3 Workouts
+      </a>
+    </li>
+  </ul>
+
+  <!-- Trimester Safe Workouts -->
+  {% set current_ex = exercise_data.trimesters[selected_trimester] %}
+  <div class="dash-card mb-4 shadow-sm">
+    <div class="dash-header">
+      <span><i class="fa-solid fa-dumbbell text-danger me-2"></i> {{ current_ex.title }}</span>
+    </div>
+    <div class="dash-body">
+      <p class="text-muted mb-4"><strong>General Guidelines:</strong> {{ current_ex.guidelines }}</p>
+
+      <div class="row g-3">
+        {% for ex in current_ex.exercises %}
+        <div class="col-md-4">
+          <div class="p-3 bg-light rounded-3 border h-100">
+            <h5 class="fw-bold text-dark mb-1">{{ ex.name }}</h5>
+            <span class="badge bg-primary mb-2">{{ ex.duration }}</span>
+            <p class="small text-muted mb-2"><strong>Benefits:</strong> {{ ex.benefits }}</p>
+            <div class="small bg-white p-2 rounded border">
+              <strong>Tip:</strong> {{ ex.tips }}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Interactive Kegel Trainer -->
+    <div class="col-lg-6">
+      <div class="dash-card shadow-sm h-100">
+        <div class="dash-header">
+          <span><i class="fa-solid fa-heart-pulse text-danger me-2"></i> Interactive Kegel (Pelvic Floor) Trainer</span>
+        </div>
+        <div class="dash-body text-center">
+          <p class="small text-muted mb-3">
+            Strengthen your pelvic floor muscles to support bladder control and labor pushing. Follow the animated ring below!
+          </p>
+
+          <div class="kegel-container">
+            <div class="kegel-ring" id="kegel-ring">
+              <div class="kegel-seconds" id="kegel-timer-text">5</div>
+              <div class="kegel-label" id="kegel-action-label" style="color: #718096;">READY TO START</div>
+            </div>
+
+            <div class="mb-3">
+              <span class="text-muted small">Reps Completed: </span>
+              <strong class="text-dark" id="kegel-rep-count">0 / 10</strong>
+            </div>
+
+            <div class="d-flex justify-content-center gap-2">
+              <button type="button" class="btn btn-mamacare" id="kegelStartBtn">
+                <i class="fa-solid fa-play me-1"></i> Start 10-Rep Set
+              </button>
+              <button type="button" class="btn btn-outline-danger d-none" id="kegelStopBtn">
+                <i class="fa-solid fa-stop me-1"></i> Stop Trainer
+              </button>
+            </div>
+          </div>
+
+          <div class="text-start mt-3 p-3 bg-light rounded small">
+            <strong>How to perform:</strong> Squeeze your pelvic muscles (as if stopping urination) when the ring expands, and fully relax when it contracts.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exercise Red Flags & Contraindications -->
+    <div class="col-lg-6">
+      <div class="dash-card shadow-sm h-100">
+        <div class="dash-header">
+          <span class="text-danger fw-bold"><i class="fa-solid fa-triangle-exclamation me-2"></i> When to Stop Exercising Immediately</span>
+        </div>
+        <div class="dash-body">
+          <p class="small text-muted">If you experience any of the following warning signs during physical activity, stop exercising immediately and contact your doctor:</p>
+          <ul class="list-unstyled">
+            {% for signal in exercise_data.stop_signals %}
+            <li class="d-flex align-items-start mb-2 small text-danger">
+              <i class="fa-solid fa-circle-exclamation mt-1 me-2 flex-shrink-0"></i>
+              <span><strong>{{ signal }}</strong></span>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <div class="alert alert-warning border-0 rounded-3 mt-3 mb-0 small">
+            <i class="fa-solid fa-shield-halved me-1"></i> Always consult your healthcare provider prior to starting a new exercise regimen, especially if you have placenta previa, cervical insufficiency, or gestational hypertension.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

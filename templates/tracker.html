@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Week {{ selected_week }} Pregnancy Tracker | MamaCare{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Page Header -->
+  <div class="text-center max-w-700 mx-auto mb-4">
+    <span class="badge bg-pink text-danger px-3 py-2 rounded-pill mb-2 fw-bold" style="background-color: #ffe4e9;">
+      <i class="fa-solid fa-baby me-1"></i> 40-Week Interactive Explorer
+    </span>
+    <h2 class="fw-bold text-dark">Pregnancy Week-by-Week Tracker</h2>
+    <p class="text-muted">
+      Discover how your baby is growing and what maternal physical changes to expect during <strong>Week {{ selected_week }}</strong>.
+    </p>
+  </div>
+
+  <!-- Interactive Week Selector Slider & Buttons -->
+  <div class="dash-card p-3 mb-4 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+      <span class="fw-bold text-dark"><i class="fa-solid fa-sliders text-danger me-2"></i> Select Week: <strong>Week <span id="sliderWeekDisplay">{{ selected_week }}</span> of 40</strong></span>
+      <div class="d-flex gap-2">
+        {% if selected_week > 1 %}
+        <a href="{{ url_for('tracker', week=selected_week-1) }}" class="btn btn-sm btn-outline-secondary">
+          <i class="fa-solid fa-chevron-left me-1"></i> Week {{ selected_week-1 }}
+        </a>
+        {% endif %}
+        {% if selected_week < 40 %}
+        <a href="{{ url_for('tracker', week=selected_week+1) }}" class="btn btn-sm btn-mamacare">
+          Week {{ selected_week+1 }} <i class="fa-solid fa-chevron-right ms-1"></i>
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    <input type="range" class="form-range" min="1" max="40" value="{{ selected_week }}" id="weekRangeSlider">
+    
+    <!-- Quick Jump Badges for Trimesters -->
+    <div class="d-flex justify-content-between text-center small text-muted mt-2">
+      <a href="{{ url_for('tracker', week=1) }}" class="badge badge-t1 text-decoration-none">Trimester 1 (Weeks 1-12)</a>
+      <a href="{{ url_for('tracker', week=13) }}" class="badge badge-t2 text-decoration-none">Trimester 2 (Weeks 13-27)</a>
+      <a href="{{ url_for('tracker', week=28) }}" class="badge badge-t3 text-decoration-none">Trimester 3 (Weeks 28-40)</a>
+    </div>
+  </div>
+
+  <!-- Week Details Card -->
+  <div class="row g-4">
+    <!-- Left Column: Fruit Analogy & Vital Statistics -->
+    <div class="col-lg-5">
+      <div class="baby-fruit-box shadow-sm mb-4">
+        <div class="baby-emoji mb-3">{{ week_info.emoji }}</div>
+        <span class="badge {% if week_info.trimester == 1 %}badge-t1{% elif week_info.trimester == 2 %}badge-t2{% else %}badge-t3{% endif %} mb-2">
+          Trimester {{ week_info.trimester }} • Week {{ week_info.week }}
+        </span>
+        <h3 class="fw-bold text-dark mb-2">Size of a {{ week_info.fruit }}</h3>
+        <p class="text-muted small mb-4">At week {{ week_info.week }}, your developing baby is comparable in size to a {{ week_info.fruit }}.</p>
+        
+        <div class="row g-3 text-center">
+          <div class="col-6">
+            <div class="p-3 bg-white rounded-3 border">
+              <div class="small text-muted mb-1"><i class="fa-solid fa-ruler-vertical text-primary me-1"></i> Length</div>
+              <h5 class="fw-bold text-dark mb-0">~{{ week_info.length_cm }} cm</h5>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 bg-white rounded-3 border">
+              <div class="small text-muted mb-1"><i class="fa-solid fa-weight-scale text-success me-1"></i> Weight</div>
+              <h5 class="fw-bold text-dark mb-0">~{{ week_info.weight_g }} g</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Tips Box -->
+      <div class="dash-card shadow-sm">
+        <div class="dash-header">
+          <span><i class="fa-solid fa-lightbulb text-warning me-2"></i> Week {{ selected_week }} Action Checklist</span>
+        </div>
+        <div class="dash-body">
+          <ul class="list-unstyled mb-0">
+            {% for tip in week_info.tips %}
+            <li class="d-flex align-items-start mb-2 small text-dark">
+              <i class="fa-solid fa-circle-check text-success mt-1 me-2 flex-shrink-0"></i>
+              <span>{{ tip }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Milestones and Maternal Changes -->
+    <div class="col-lg-7">
+      <!-- Fetal Developmental Milestones -->
+      <div class="dash-card shadow-sm mb-4">
+        <div class="dash-header">
+          <span><i class="fa-solid fa-dna text-danger me-2"></i> Fetal Development Milestones</span>
+          <span class="badge bg-light text-dark border">Week {{ selected_week }}</span>
+        </div>
+        <div class="dash-body">
+          <div class="timeline">
+            {% for milestone in week_info.milestones %}
+            <div class="d-flex align-items-start mb-3">
+              <div class="me-3">
+                <span class="badge bg-danger rounded-circle p-2"><i class="fa-solid fa-star text-white"></i></span>
+              </div>
+              <div>
+                <p class="text-dark mb-0 fw-medium">{{ milestone }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Mother's Body Changes & Symptoms -->
+      <div class="dash-card shadow-sm mb-4">
+        <div class="dash-header">
+          <span><i class="fa-solid fa-person-breastfeeding text-purple me-2"></i> Changes in Your Body & Symptoms</span>
+        </div>
+        <div class="dash-body">
+          {% for change in week_info.mother_changes %}
+          <div class="d-flex align-items-start mb-2">
+            <i class="fa-solid fa-circle-dot text-primary mt-1 me-2 flex-shrink-0"></i>
+            <span class="text-dark">{{ change }}</span>
+          </div>
+          {% endfor %}
+          <div class="alert alert-info border-0 rounded-3 mt-3 mb-0 small">
+            <i class="fa-solid fa-info-circle me-1"></i> Every pregnancy is unique! You may experience some or all of these physiological signs at varying intensities.
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Navigation Links -->
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{{ url_for('nutrition', trimester=week_info.trimester) }}" class="btn btn-outline-success btn-sm">
+          <i class="fa-solid fa-apple-whole me-1"></i> Trimester {{ week_info.trimester }} Nutrition
+        </a>
+        <a href="{{ url_for('exercise', trimester=week_info.trimester) }}" class="btn btn-outline-primary btn-sm">
+          <i class="fa-solid fa-person-walking me-1"></i> Trimester {{ week_info.trimester }} Exercise
+        </a>
+        <a href="{{ url_for('health_tips') }}" class="btn btn-outline-secondary btn-sm">
+          <i class="fa-solid fa-moon me-1"></i> Sleep & Health Tips
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

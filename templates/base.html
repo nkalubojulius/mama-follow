@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MamaCare - Pregnancy Care & Monitoring{% endblock %}</title>
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <!-- Custom MamaCare CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <!-- Medical Disclaimer Top Banner -->
+  <div class="disclaimer-banner text-center">
+    <div class="container d-flex align-items-center justify-content-center gap-2 flex-wrap">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span><strong>Medical Disclaimer:</strong> MamaCare provides educational and informational support only and is not a replacement for professional medical advice, diagnosis, or emergency care.</span>
+      <a href="{{ url_for('emergency') }}" class="badge bg-danger text-white text-decoration-none ms-2">Emergency Info</a>
+    </div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-mamacare sticky-top">
+    <div class="container">
+      <a class="navbar-brand brand-logo" href="{{ url_for('index') }}">
+        <i class="fa-solid fa-heart-pulse text-danger"></i> MamaCare
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">
+              <i class="fa-solid fa-house me-1"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'calculator' %}active{% endif %}" href="{{ url_for('calculator') }}">
+              <i class="fa-solid fa-calculator me-1"></i> Due Date Calculator
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'tracker' %}active{% endif %}" href="{{ url_for('tracker') }}">
+              <i class="fa-solid fa-baby me-1"></i> Week Tracker
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'meal_chat' %}active{% endif %}" href="{{ url_for('meal_chat') }}">
+              <i class="fa-solid fa-utensils me-1"></i> Meal Chat
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'reminders' %}active{% endif %}" href="{{ url_for('reminders') }}">
+              <i class="fa-solid fa-bell me-1"></i> Meal Reminders
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="guidesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-book-medical me-1"></i> Care Guides
+            </a>
+            <ul class="dropdown-menu border-0 shadow-sm" aria-labelledby="guidesDropdown">
+              <li><a class="dropdown-item" href="{{ url_for('meal_chat') }}"><i class="fa-solid fa-wand-magic-sparkles text-danger me-2"></i> Smart Meal AI Chat</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('reminders') }}"><i class="fa-solid fa-bell text-warning me-2"></i> Meal Reminders & Alarm</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{{ url_for('nutrition') }}"><i class="fa-solid fa-apple-whole text-success me-2"></i> Nutrition & Hydration</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('exercise') }}"><i class="fa-solid fa-person-walking text-primary me-2"></i> Safe Exercise & Kegel</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('health_tips') }}"><i class="fa-solid fa-moon text-purple me-2"></i> Sleep & Symptom Relief</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{{ url_for('emergency') }}"><i class="fa-solid fa-truck-medical me-2"></i> Emergency Warning Signs</a></li>
+            </ul>
+          </li>
+          {% if current_user %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'appointments' %}active{% endif %}" href="{{ url_for('appointments') }}">
+              <i class="fa-solid fa-calendar-check me-1"></i> Appointments
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'medicines' %}active{% endif %}" href="{{ url_for('medicines') }}">
+              <i class="fa-solid fa-pills me-1"></i> Medicines
+            </a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'contact' %}active{% endif %}" href="{{ url_for('contact') }}">
+              <i class="fa-solid fa-envelope me-1"></i> Contact
+            </a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-2">
+          {% if current_user %}
+          <div class="dropdown">
+            <button class="btn btn-outline-mamacare dropdown-toggle d-flex align-items-center gap-2" type="button" id="userMenuBtn" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-circle-user"></i> {{ current_user.name }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="userMenuBtn">
+              <li><a class="dropdown-item" href="{{ url_for('profile') }}"><i class="fa-solid fa-id-card me-2"></i> My Dashboard</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('reminders') }}"><i class="fa-solid fa-bell me-2"></i> Meal Reminders</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('appointments') }}"><i class="fa-solid fa-calendar-days me-2"></i> Appointments</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('medicines') }}"><i class="fa-solid fa-prescription-bottle-medical me-2"></i> Medicines</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket me-2"></i> Sign Out</a></li>
+            </ul>
+          </div>
+          {% else %}
+          <a href="{{ url_for('login') }}" class="btn btn-outline-mamacare">Sign In</a>
+          <a href="{{ url_for('register') }}" class="btn btn-mamacare">Join MamaCare</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  <div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show border-0 shadow-sm" role="alert">
+            <i class="fa-solid {% if category == 'success' %}fa-circle-check{% elif category == 'danger' %}fa-circle-xmark{% elif category == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %} me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Main Content Area -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <h5 class="text-white fw-bold mb-3">
+            <i class="fa-solid fa-heart-pulse text-danger me-2"></i>MamaCare
+          </h5>
+          <p class="small text-muted">
+            MamaCare is an intelligent pregnancy care and monitoring web application designed to support expectant mothers with evidence-based guidance, due date tracking, clinical reminders, and maternal wellness tools.
+          </p>
+          <div class="d-flex gap-3 mt-3">
+            <a href="#" class="text-secondary"><i class="fa-brands fa-facebook fa-lg"></i></a>
+            <a href="#" class="text-secondary"><i class="fa-brands fa-instagram fa-lg"></i></a>
+            <a href="#" class="text-secondary"><i class="fa-brands fa-youtube fa-lg"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+          <h6 class="text-white fw-bold mb-3">Quick Links</h6>
+          <ul class="list-unstyled small">
+            <li class="mb-2"><a href="{{ url_for('calculator') }}">Due Date Calculator</a></li>
+            <li class="mb-2"><a href="{{ url_for('tracker') }}">Week-by-Week Tracker</a></li>
+            <li class="mb-2"><a href="{{ url_for('meal_chat') }}"><i class="fa-solid fa-wand-magic-sparkles text-danger me-1"></i> Smart Meal Chat</a></li>
+            <li class="mb-2"><a href="{{ url_for('reminders') }}"><i class="fa-solid fa-bell text-warning me-1"></i> Meal Reminders</a></li>
+            <li class="mb-2"><a href="{{ url_for('nutrition') }}">Nutrition & Diet</a></li>
+            <li class="mb-2"><a href="{{ url_for('exercise') }}">Exercise & Kegel</a></li>
+            <li class="mb-2"><a href="{{ url_for('health_tips') }}">Sleep & Wellness</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h6 class="text-white fw-bold mb-3">Clinical Management</h6>
+          <ul class="list-unstyled small">
+            <li class="mb-2"><a href="{{ url_for('reminders') }}">Daily Meal Reminders & Alarm</a></li>
+            <li class="mb-2"><a href="{{ url_for('appointments') }}">Doctor Appointment Reminders</a></li>
+            <li class="mb-2"><a href="{{ url_for('medicines') }}">Medicine Schedule</a></li>
+            <li class="mb-2"><a href="{{ url_for('emergency') }}">Danger Signs & Red Flags</a></li>
+            <li class="mb-2"><a href="{{ url_for('contact') }}">Contact & Support</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="p-3 rounded-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+            <h6 class="text-danger fw-bold mb-2"><i class="fa-solid fa-phone-volume me-2"></i>Emergency Help</h6>
+            <p class="small text-muted mb-2">If experiencing severe pain, bleeding, or emergency symptoms, contact emergency medical services immediately.</p>
+            <a href="tel:911" class="btn btn-sm btn-danger w-100 fw-bold"><i class="fa-solid fa-ambulance me-1"></i> Call Emergency (911 / 112)</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom text-center">
+        <p class="mb-1">© {{ current_year }} MamaCare – Pregnancy Care and Monitoring Portal. Built for College Final Year Project.</p>
+        <p class="small text-muted mb-0"><strong>Disclaimer:</strong> Content is strictly educational. Always consult a licensed obstetrician/gynecologist for medical diagnoses and treatment.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- On-Screen Meal Alarm Notification Toast Banner -->
+  <div id="meal-alarm-toast" class="meal-alarm-toast d-none" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="meal-alarm-content">
+      <div class="meal-alarm-icon">
+        <i class="fa-solid fa-bell text-warning fa-shake"></i>
+      </div>
+      <div class="meal-alarm-body">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <span class="badge bg-danger rounded-pill" id="meal-alarm-badge">Meal Reminder</span>
+          <span class="small text-muted" id="meal-alarm-time">Now</span>
+        </div>
+        <h6 class="mb-1 fw-bold text-dark" id="meal-alarm-title">Time for Your Scheduled Meal!</h6>
+        <p class="mb-2 small text-muted" id="meal-alarm-notes">Take a moment to nourish yourself and your baby with healthy hydration.</p>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-sm btn-mamacare" id="meal-alarm-dismiss-btn"><i class="fa-solid fa-check me-1"></i> Mark Eaten</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="meal-alarm-snooze-btn"><i class="fa-solid fa-clock me-1"></i> Snooze 10m</button>
+        </div>
+      </div>
+      <button type="button" class="btn-close meal-alarm-close" id="meal-alarm-x-btn" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <!-- Floating MamaCare AI Chatbot Launcher Button -->
+  <div id="chatbot-launcher-container" class="chatbot-launcher-container">
+    <button id="chatbot-toggle-btn" class="chatbot-toggle-btn" type="button" aria-label="Open MamaCare AI Assistant">
+      <div class="chatbot-btn-pulse"></div>
+      <i class="fa-solid fa-wand-magic-sparkles chatbot-icon-ai"></i>
+      <i class="fa-solid fa-xmark chatbot-icon-close d-none"></i>
+      <span class="chatbot-tooltip">Ask MamaCare AI 💬</span>
+    </button>
+  </div>
+
+  <!-- MamaCare AI Chatbot Window Container -->
+  <div id="chatbot-window" class="chatbot-window d-none" role="dialog" aria-labelledby="chatbot-title">
+    <!-- Chat Header -->
+    <div class="chatbot-header">
+      <div class="d-flex align-items-center gap-2">
+        <div class="chatbot-avatar">
+          <i class="fa-solid fa-heart-pulse text-danger"></i>
+        </div>
+        <div>
+          <h6 id="chatbot-title" class="chatbot-title mb-0">MamaCare AI Assistant</h6>
+          <span class="chatbot-status"><span class="status-dot"></span> Online &bull; Educational Guide</span>
+        </div>
+      </div>
+      <div class="chatbot-controls d-flex align-items-center gap-1">
+        <button id="chatbot-clear-btn" class="chatbot-ctrl-btn" type="button" title="Clear conversation history">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+        <button id="chatbot-close-btn" class="chatbot-ctrl-btn" type="button" title="Close chat">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Chat Medical Disclaimer Notice -->
+    <div class="chatbot-disclaimer">
+      <i class="fa-solid fa-shield-heart me-1 text-danger"></i>
+      <span>Educational guidance only. Not a medical diagnosis or prescription.</span>
+    </div>
+
+    <!-- Chat Messages Scroll Container -->
+    <div id="chatbot-messages" class="chatbot-messages">
+      <!-- Default Welcome Message -->
+      <div class="chat-message bot-message">
+        <div class="message-avatar">
+          <i class="fa-solid fa-baby"></i>
+        </div>
+        <div class="message-content">
+          <p class="mb-0">Hello! 👋 Welcome to <strong>MamaCare</strong>. I can provide general pregnancy-related information and educational guidance. Please remember that I cannot provide a medical diagnosis or replace advice from a qualified healthcare professional. How can I help you today?</p>
+          <span class="message-time">Just now</span>
+        </div>
+      </div>
+
+      <!-- Quick Prompt Suggestion Chips -->
+      <div id="chatbot-quick-prompts" class="chatbot-quick-prompts my-2">
+        <span class="prompt-chip" data-prompt="What should I eat in Trimester 1?">🥗 Trimester 1 Diet</span>
+        <span class="prompt-chip" data-prompt="Tell me about fetal development at Week 20">🥑 Week 20 Growth</span>
+        <span class="prompt-chip" data-prompt="Is walking safe during pregnancy?">🧘‍♀️ Safe Exercises</span>
+        <span class="prompt-chip" data-prompt="How to relieve morning sickness?">🍋 Morning Sickness</span>
+        <span class="prompt-chip" data-prompt="What are red-flag emergency symptoms?">🚨 Red-Flag Signs</span>
+        <span class="prompt-chip" data-prompt="How do I do Kegel exercises?">💪 Kegel Guide</span>
+      </div>
+    </div>
+
+    <!-- Typing Indicator (Hidden by default) -->
+    <div id="chatbot-typing" class="chatbot-typing d-none">
+      <div class="typing-bubble">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+      <span class="small text-muted ms-2">MamaCare is preparing an answer...</span>
+    </div>
+
+    <!-- Chat Input Area -->
+    <form id="chatbot-form" class="chatbot-input-area">
+      <div class="input-group">
+        <input type="text" id="chatbot-input" class="form-control chatbot-input" placeholder="Ask about pregnancy, diet, weeks..." autocomplete="off" maxlength="500">
+        <button type="submit" id="chatbot-send-btn" class="btn btn-mamacare-chat" aria-label="Send Message">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom Script -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

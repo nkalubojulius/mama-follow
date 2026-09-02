@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Emergency Red Flags & Hospital Checklist | MamaCare{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Page Header -->
+  <div class="text-center max-w-700 mx-auto mb-4">
+    <span class="badge bg-danger text-white px-3 py-2 rounded-pill mb-2 fw-bold">
+      <i class="fa-solid fa-truck-medical me-1"></i> Clinical Safety & Emergency
+    </span>
+    <h2 class="fw-bold text-danger">Pregnancy Danger Signs & Emergency Guide</h2>
+    <p class="text-muted">
+      Know the critical symptoms that require immediate medical evaluation, access emergency hotlines, and verify your hospital packing checklist.
+    </p>
+  </div>
+
+  <!-- Medical Disclaimer Alert -->
+  <div class="alert alert-danger border-0 shadow-sm p-4 rounded-4 mb-4">
+    <div class="d-flex align-items-start">
+      <i class="fa-solid fa-triangle-exclamation fa-2x text-danger me-3 flex-shrink-0 mt-1"></i>
+      <div>
+        <h5 class="fw-bold text-danger mb-1">Crucial Medical Disclaimer</h5>
+        <p class="small text-dark mb-0">
+          MamaCare is an informational tool only. If you experience severe abdominal pain, heavy bleeding, sudden facial swelling, or fluid leakage, do not wait. Go immediately to the nearest maternity hospital emergency room or call emergency services.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Red Flag Symptoms Matrix -->
+    <div class="col-lg-7">
+      <div class="dash-card shadow-sm h-100">
+        <div class="dash-header bg-white">
+          <span class="text-danger fw-bold"><i class="fa-solid fa-circle-exclamation me-2"></i> Critical Red Flag Symptoms</span>
+        </div>
+        <div class="dash-body">
+          {% for item in emergency_data.danger_signs %}
+          <div class="emergency-card">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h6 class="fw-bold text-danger mb-0">{{ item.sign }}</h6>
+              <span class="badge {% if item.urgency == 'Immediate Emergency' %}bg-danger{% else %}bg-warning text-dark{% endif %}">{{ item.urgency }}</span>
+            </div>
+            <p class="small text-dark mb-0">{{ item.description }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Emergency Contacts & Hospital Checklist -->
+    <div class="col-lg-5">
+      <!-- Emergency Hotlines Box -->
+      <div class="dash-card shadow-sm mb-4 border-danger">
+        <div class="dash-header bg-danger text-white">
+          <span class="fw-bold"><i class="fa-solid fa-phone-volume me-2"></i> 24/7 Emergency Directory</span>
+        </div>
+        <div class="dash-body">
+          <div class="mb-3">
+            <div class="small text-muted mb-1">National Emergency Services (US / EU / Global):</div>
+            <div class="d-flex gap-2">
+              <a href="tel:911" class="btn btn-danger flex-grow-1 fw-bold"><i class="fa-solid fa-phone me-1"></i> Call 911 (US)</a>
+              <a href="tel:112" class="btn btn-danger flex-grow-1 fw-bold"><i class="fa-solid fa-phone me-1"></i> Call 112 (EU/Global)</a>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="small text-muted mb-1">Maternal Mental Health Hotline:</div>
+            <a href="tel:18338526262" class="btn btn-outline-primary w-100 fw-bold"><i class="fa-solid fa-headset me-1"></i> 1-833-852-6262 (24/7 Free)</a>
+          </div>
+
+          {% if current_user and current_user.emergency_contact_name %}
+          <div class="p-3 bg-light rounded-3 border">
+            <div class="small text-muted mb-1">Your Registered Emergency Contact:</div>
+            <div class="fw-bold text-dark">{{ current_user.emergency_contact_name }}</div>
+            <div class="text-danger fw-bold"><a href="tel:{{ current_user.emergency_contact_phone }}" class="text-danger text-decoration-none"><i class="fa-solid fa-phone me-1"></i> {{ current_user.emergency_contact_phone }}</a></div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Hospital Bag Checklist -->
+      <div class="dash-card shadow-sm">
+        <div class="dash-header">
+          <span><i class="fa-solid fa-suitcase-medical text-primary me-2"></i> Hospital Go-Bag Checklist</span>
+        </div>
+        <div class="dash-body">
+          <h6 class="fw-bold small text-danger mb-2">For Mom:</h6>
+          <ul class="list-unstyled small mb-3">
+            {% for it in emergency_data.hospital_checklist.mom %}
+            <li class="mb-1"><i class="fa-solid fa-square-check text-success me-1"></i> {{ it }}</li>
+            {% endfor %}
+          </ul>
+
+          <h6 class="fw-bold small text-primary mb-2">For Baby:</h6>
+          <ul class="list-unstyled small mb-0">
+            {% for it in emergency_data.hospital_checklist.baby %}
+            <li class="mb-1"><i class="fa-solid fa-square-check text-primary me-1"></i> {{ it }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

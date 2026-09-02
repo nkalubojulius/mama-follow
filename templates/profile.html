@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}My Dashboard & Profile | MamaCare{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="dash-card shadow-sm text-center mb-4">
+        <div class="dash-body">
+          <div class="mb-3">
+            <span class="badge bg-danger rounded-circle p-3" style="font-size: 2rem;">
+              <i class="fa-solid fa-user-nurse text-white"></i>
+            </span>
+          </div>
+          <h4 class="fw-bold text-dark mb-1">{{ user.name }}</h4>
+          <p class="text-muted small mb-3">{{ user.email }}</p>
+          <span class="badge bg-light text-dark border mb-3">Blood Group: {{ user.blood_group or 'Not set' }}</span>
+
+          {% if user_metrics %}
+          <div class="baby-fruit-box p-3 text-center mb-3">
+            <div class="baby-emoji mb-1" style="font-size: 3rem;">{{ user_metrics.week_data.emoji }}</div>
+            <h5 class="fw-bold text-dark mb-0">Week {{ user_metrics.current_week }} (Day {{ user_metrics.current_day }})</h5>
+            <p class="small text-muted mb-2">{{ user_metrics.trimester_name }} • Size of {{ user_metrics.week_data.fruit }}</p>
+            <div class="pregnancy-progress mb-2">
+              <div class="pregnancy-progress-bar text-center text-white small fw-bold" style="width: {{ user_metrics.progress_pct }}%;"></div>
+            </div>
+            <span class="small text-muted">Due Date: <strong>{{ user_metrics.due_date_formatted }}</strong> ({{ user_metrics.days_remaining }} days left)</span>
+          </div>
+          <a href="{{ url_for('tracker', week=user_metrics.current_week) }}" class="btn btn-outline-mamacare btn-sm w-100">
+            <i class="fa-solid fa-baby me-1"></i> View Week {{ user_metrics.current_week }} Guide
+          </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="dash-card shadow-sm border-danger">
+        <div class="dash-header bg-danger text-white"><span class="fw-bold"><i class="fa-solid fa-phone me-2"></i> Emergency Contact</span></div>
+        <div class="dash-body">
+          <div class="fw-bold text-dark">{{ user.emergency_contact_name or 'No contact name specified' }}</div>
+          <div class="text-danger fw-bold">{{ user.emergency_contact_phone or 'No phone specified' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="dash-card shadow-sm mb-4">
+        <div class="dash-header"><span><i class="fa-solid fa-user-pen text-danger me-2"></i> Update Pregnancy Profile</span></div>
+        <div class="dash-body">
+          <form action="{{ url_for('profile') }}" method="POST">
+            <input type="hidden" name="action" value="update_profile">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Full Name:</label>
+                <input type="text" class="form-control" name="name" value="{{ user.name }}" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Blood Group:</label>
+                <select class="form-select" name="blood_group">
+                  <option value="A+" {% if user.blood_group == 'A+' %}selected{% endif %}>A+</option>
+                  <option value="A-" {% if user.blood_group == 'A-' %}selected{% endif %}>A-</option>
+                  <option value="B+" {% if user.blood_group == 'B+' %}selected{% endif %}>B+</option>
+                  <option value="B-" {% if user.blood_group == 'B-' %}selected{% endif %}>B-</option>
+                  <option value="AB+" {% if user.blood_group == 'AB+' %}selected{% endif %}>AB+</option>
+                  <option value="AB-" {% if user.blood_group == 'AB-' %}selected{% endif %}>AB-</option>
+                  <option value="O+" {% if user.blood_group == 'O+' %}selected{% endif %}>O+</option>
+                  <option value="O-" {% if user.blood_group == 'O-' %}selected{% endif %}>O-</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold">First Day of Last Period (LMP):</label>
+              <input type="date" class="form-control" name="lmp_date" value="{{ user.lmp_date or '' }}" max="{{ current_year }}-12-31">
+            </div>
+
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Emergency Contact Name:</label>
+                <input type="text" class="form-control" name="emergency_contact_name" value="{{ user.emergency_contact_name or '' }}">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Emergency Contact Phone:</label>
+                <input type="tel" class="form-control" name="emergency_contact_phone" value="{{ user.emergency_contact_phone or '' }}">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-mamacare">Save Profile Details</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="dash-card shadow-sm">
+        <div class="dash-header"><span><i class="fa-solid fa-lock text-danger me-2"></i> Change Password</span></div>
+        <div class="dash-body">
+          <form action="{{ url_for('profile') }}" method="POST">
+            <input type="hidden" name="action" value="change_password">
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Current Password:</label>
+              <input type="password" class="form-control" name="old_password" required>
+            </div>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">New Password:</label>
+                <input type="password" class="form-control" name="new_password" required minlength="6">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Confirm New Password:</label>
+                <input type="password" class="form-control" name="confirm_new_password" required minlength="6">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-outline-danger">Update Password</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
