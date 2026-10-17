@@ -5,7 +5,7 @@ from app import app, calculate_pregnancy_metrics
 from pregnancy_data import WEEKS_DATA, NUTRITION_GUIDE, EXERCISE_GUIDE, HEALTH_TIPS, EMERGENCY_DATA
 from database.db import db
 
-class MamaCareTestCase(unittest.TestCase):
+class MamaFollowTestCase(unittest.TestCase):
     def setUp(self):
         app.config['TESTING'] = True
         app.config['SECRET_KEY'] = 'test_secret_key'
@@ -63,7 +63,7 @@ class MamaCareTestCase(unittest.TestCase):
         # 2. Add an appointment
         appt_res = self.client.post('/appointments', data={
             'doctor_name': 'Dr. Test Physician',
-            'clinic_hospital': 'University Medical Center',
+            'clinic_hospital': 'Uganda Medical Center',
             'appointment_date': '2026-11-15',
             'appointment_time': '11:00',
             'reason': 'Final Trimester Growth Scan',
@@ -87,10 +87,10 @@ class MamaCareTestCase(unittest.TestCase):
     def test_contact_form(self):
         res = self.client.post('/contact', data={
             'name': 'Test Student Evaluator',
-            'email': 'evaluator@college.edu',
-            'phone': '+1 (555) 123-4567',
+            'email': 'mak@college.ug',
+            'phone': '+256 555 123 787',
             'subject': 'Project Evaluation Question',
-            'message': 'This is an automated test contact message for MamaCare.'
+            'message': 'This is an automated test contact message for MamaFollow.'
         }, follow_redirects=True)
         self.assertEqual(res.status_code, 200)
         self.assertIn(b'safely received', res.data)

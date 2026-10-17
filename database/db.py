@@ -28,9 +28,9 @@ class DatabaseManager:
             conn.select_db(self.config.MYSQL_DB)
             conn.close()
             self.engine_type = 'mysql'
-            print(f"[MamaCare DB] Connected to MySQL database '{self.config.MYSQL_DB}'.")
+            print(f"[MamaFollow DB] Connected to MySQL database '{self.config.MYSQL_DB}'.")
         except Exception as e:
-            print(f"[MamaCare DB] MySQL not available ({e}). Using local SQLite fallback database.")
+            print(f"[MamaFollow DB] MySQL not available ({e}). Using local SQLite fallback database.")
             self.engine_type = 'sqlite'
             os.makedirs(os.path.dirname(self.config.SQLITE_PATH), exist_ok=True)
             
@@ -234,19 +234,19 @@ class DatabaseManager:
                 demo_hash = generate_password_hash('password123')
                 cur.execute("""
                 INSERT INTO users (name, email, password_hash, lmp_date, due_date, blood_group, emergency_contact_name, emergency_contact_phone)
-                VALUES (?, ?, ?, date('now', '-140 days'), date('now', '+140 days'), 'O+', 'Michael Johnson (Husband)', '+1 (555) 234-5678')
+                VALUES (?, ?, ?, date('now', '-140 days'), date('now', '+140 days'), 'O+', 'Michael Johnson (Husband)', '+256 123 456 789')
                 """, ('Sarah Johnson', 'sarah@example.com', demo_hash))
                 user_id = cur.lastrowid
                 
                 cur.execute("""
                 INSERT INTO appointments (user_id, doctor_name, clinic_hospital, appointment_date, appointment_time, reason, notes, is_completed)
                 VALUES (?, ?, ?, date('now', '+5 days'), '10:30', '20-Week Anatomy Ultrasound Scan', 'Drink 2 glasses of water prior to appointment.', 0)
-                """, (user_id, 'Dr. Emily Carter, OB-GYN', 'City Maternity Hospital, Suite 302'))
+                """, (user_id, 'Dr.Mike Mawanda, OB-GYN', 'International Hospital Kampala'))
 
                 cur.execute("""
                 INSERT INTO appointments (user_id, doctor_name, clinic_hospital, appointment_date, appointment_time, reason, notes, is_completed)
                 VALUES (?, ?, ?, date('now', '+20 days'), '14:00', 'Routine Prenatal Checkup & Blood Pressure', 'Discuss iron supplement dosage.', 0)
-                """, (user_id, 'Dr. Robert Davis', 'Wellness Family Clinic'))
+                """, (user_id, 'Dr. Robert Kayondo', 'Wellness Family Clinic, Kampala'))
 
                 cur.execute("""
                 INSERT INTO medicine_reminders (user_id, medicine_name, dosage, frequency, reminder_time, instructions, is_active)
@@ -267,27 +267,27 @@ class DatabaseManager:
                 cur.execute("""
                 INSERT INTO meal_reminders (user_id, meal_name, meal_type, reminder_time, notes, is_active)
                 VALUES (?, ?, ?, ?, ?, ?)
-                """, (user_id, 'Warm Oatmeal with Walnuts & Chia Seeds', 'Breakfast', '08:00', 'Rich in iron, folate and slow-release carbs', 1))
+                """, (user_id, 'Millet Porridge with Groundnuts and a Boiled Egg', 'Breakfast', '08:00', 'Rich in iron, folate and slow-release carbs', 1))
 
                 cur.execute("""
                 INSERT INTO meal_reminders (user_id, meal_name, meal_type, reminder_time, notes, is_active)
                 VALUES (?, ?, ?, ?, ?, ?)
-                """, (user_id, 'Greek Yogurt with Sliced Strawberries', 'Morning Snack', '11:00', 'High calcium and protein boost', 1))
+                """, (user_id, 'Ripe Banana, Orange and Pasteurised Milk', 'Morning Snack', '11:00', 'High calcium and protein boost', 1))
 
                 cur.execute("""
                 INSERT INTO meal_reminders (user_id, meal_name, meal_type, reminder_time, notes, is_active)
                 VALUES (?, ?, ?, ?, ?, ?)
-                """, (user_id, 'Spinach Lentil Bowl with Brown Rice & Avocado', 'Lunch', '13:00', 'Plant iron paired with healthy fats for DHA absorption', 1))
+                """, (user_id, 'Matooke with Beans, Dodo and Avocado', 'Lunch', '13:00', 'Plant iron paired with healthy fats for DHA absorption', 1))
 
                 cur.execute("""
                 INSERT INTO meal_reminders (user_id, meal_name, meal_type, reminder_time, notes, is_active)
                 VALUES (?, ?, ?, ?, ?, ?)
-                """, (user_id, 'Roasted Chickpeas & 1 Glass Lemon Water', 'Evening Snack', '17:00', 'High fiber and hydration replenisher', 1))
+                """, (user_id, 'Boiled Sweet Potatoes with Groundnuts/Cowpeas & 1 Glass Lemon Water', 'Evening Snack', '17:00', 'High fiber and hydration replenisher', 1))
 
                 cur.execute("""
                 INSERT INTO meal_reminders (user_id, meal_name, meal_type, reminder_time, notes, is_active)
                 VALUES (?, ?, ?, ?, ?, ?)
-                """, (user_id, 'Steamed Vegetables with Paneer/Tofu & Quinoa', 'Dinner', '20:00', 'Light, easily digestible to avoid nighttime heartburn', 1))
+                """, (user_id, 'Posho with Well-Cooked Fish and Steamed Sukuma Wiki', 'Dinner', '20:00', 'Light, easily digestible to avoid nighttime heartburn', 1))
                 
                 # Seed User Diet Preferences
                 cur.execute("""

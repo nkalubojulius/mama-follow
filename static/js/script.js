@@ -1,4 +1,4 @@
-// MamaCare Interactive JavaScript Client Logic
+// MamaFollow Interactive JavaScript Client Logic
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Tooltips
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initKegelTrainer();
   }
 
-  // Initialize MamaCare AI Chatbot
+  // Initialize MamaFollow AI Chatbot
   initChatbot();
 
   // Initialize Real-Time Meal Alarm & Notification Engine
@@ -180,7 +180,7 @@ function initKegelTrainer() {
   if (stopBtn) stopBtn.addEventListener('click', stopTrainer);
 }
 
-/* --- MamaCare AI Chatbot Logic --- */
+/* --- MamaFollow AI Chatbot Logic --- */
 function initChatbot() {
   const toggleBtn = document.getElementById('chatbot-toggle-btn');
   const chatWindow = document.getElementById('chatbot-window');
@@ -313,7 +313,7 @@ function initChatbot() {
               <i class="fa-solid fa-baby"></i>
             </div>
             <div class="message-content">
-              <p class="mb-0">Hello! 👋 Welcome to <strong>MamaCare</strong>. I can provide general pregnancy-related information and educational guidance. Please remember that I cannot provide a medical diagnosis or replace advice from a qualified healthcare professional. How can I help you today?</p>
+              <p class="mb-0">Hello! 👋 Welcome to <strong>MamaFollow</strong>. I can provide general pregnancy-related information and educational guidance. Please remember that I cannot provide a medical diagnosis or replace advice from a qualified healthcare professional. How can I help you today?</p>
               <span class="message-time">Just now</span>
             </div>
           </div>
@@ -484,7 +484,7 @@ function initMealAlarmEngine() {
 
           // Native Browser notification
           if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification(`MamaCare: Time for ${r.meal_name}!`, {
+            new Notification(`MamaFollow: Time for ${r.meal_name}!`, {
               body: `${r.meal_type} scheduled at ${r.reminder_time}. ${r.notes || ''}`,
               icon: '/static/images/logo.png'
             });

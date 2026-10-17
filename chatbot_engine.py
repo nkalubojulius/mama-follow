@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from pregnancy_data import WEEKS_DATA, NUTRITION_GUIDE, EXERCISE_GUIDE, HEALTH_TIPS, EMERGENCY_DATA
 
-SYSTEM_PROMPT = """You are MamaCare AI, a friendly, caring, empathetic, and professional pregnancy educational assistant.
+SYSTEM_PROMPT = """You are MamaFollow AI, a friendly, caring, empathetic, and professional pregnancy educational assistant.
 Your purpose is to provide general educational information and supportive guidance for expectant mothers.
 
 STRICT SAFETY AND MEDICAL GUIDELINES:
@@ -12,7 +12,7 @@ STRICT SAFETY AND MEDICAL GUIDELINES:
 2. NO MEDICAL DIAGNOSIS: Never diagnose medical conditions, diseases, or obstetric complications.
 3. NO PRESCRIPTIONS OR DOSAGE CHANGES: Never prescribe medications or advise changing prescribed pharmaceutical dosages.
 4. DO NOT REPLACE HEALTHCARE PROVIDERS: Consistently emphasize that you cannot replace a licensed obstetrician, gynecologist, or midwife.
-5. URGENT EMERGENCY SYMPTOMS: If the user mentions red-flag symptoms (heavy vaginal bleeding, sudden severe swelling of face/hands, severe pounding headache with vision changes, sharp constant abdominal pain, leaking amniotic fluid, or significantly decreased fetal movement in the 3rd trimester), immediately advise them in a calm, clear manner to contact emergency medical services (911/112) or go to their nearest maternity hospital emergency room.
+5. URGENT EMERGENCY SYMPTOMS: If the user mentions red-flag symptoms (heavy vaginal bleeding, sudden severe swelling of face/hands, severe pounding headache with vision changes, sharp constant abdominal pain, leaking amniotic fluid, or significantly decreased fetal movement in the 3rd trimester), immediately advise them in a calm, clear manner to contact emergency medical services (912/112) or go to their nearest maternity hospital emergency room.
 6. NO GUARANTEES: Never make absolute medical guarantees regarding the health of the mother or baby.
 7. TONE: Warm, encouraging, simple, supportive, and professional. Use maternal emojis (🌸, 👶, 💧, 🥑, ✨) appropriately.
 """
@@ -46,8 +46,8 @@ class PregnancyKnowledgeEngine:
                          "If you are experiencing **heavy bleeding, severe abdominal pain, sudden severe swelling, vision disturbances, fluid leaking, or a noticeable reduction in baby movements**, please do not wait.\n\n"
                          "👉 **Immediate Next Steps**:\n"
                          "1. Contact your OB-GYN, midwife, or labor & delivery triage unit immediately.\n"
-                         "2. If severe or unremitting, call emergency services (**911 in the US / 112 in EU/India**) or head to the nearest hospital emergency room.\n\n"
-                         "*MamaCare is an educational tool and cannot replace emergency medical care.*",
+                         "2. If severe or unremitting, call emergency services (**912 in the Uganda**) or head to the nearest hospital emergency room.\n\n"
+                         "*MamaFollow is an educational tool and cannot replace emergency medical care.*",
                 'emergency': True,
                 'links': [{'title': 'Emergency Red Flags Guide', 'url': '/emergency'}]
             }
@@ -56,7 +56,7 @@ class PregnancyKnowledgeEngine:
         if any(w in text for w in ['prescribe', 'which antibiotic', 'take ibuprofen', 'take aspirin', 'change my medicine', 'dosage of']):
             return {
                 'reply': "💊 **Medication Safety Guidance**:\n\n"
-                         "As MamaCare AI, I cannot prescribe medications or advise changes to your pharmaceutical treatment.\n\n"
+                         "As MamaFollow AI, I cannot prescribe medications or advise changes to your pharmaceutical treatment.\n\n"
                          "- **Prenatal Vitamins & Minerals**: Standard prenatal multivitamins with 400-600 mcg Folic Acid, 27 mg Iron, and Calcium are generally recommended.\n"
                          "- **Over-the-Counter Drugs**: Always consult your obstetrician or pharmacist before taking medications (e.g., NSAIDs like Ibuprofen are generally avoided in pregnancy).\n\n"
                          "Please consult your healthcare provider for any medication decisions.",
@@ -187,7 +187,7 @@ class PregnancyKnowledgeEngine:
         # 11. General Greetings & Help
         if any(w in text for w in ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'who are you', 'help']):
             return {
-                'reply': "Hello! 👋 I'm MamaCare AI, your pregnancy wellness assistant.\n\n"
+                'reply': "Hello! 👋 I'm MamaFollow AI, your pregnancy wellness assistant.\n\n"
                          "I can share evidence-based educational insights on:\n"
                          "- 🤰 Week-by-week baby growth (Weeks 1 to 40)\n"
                          "- 🥗 Trimester nutrition & food safety\n"
@@ -202,7 +202,7 @@ class PregnancyKnowledgeEngine:
         # 12. Default Helpful Educational Guidance
         return {
             'reply': "Thank you for asking! 🌸\n\n"
-                     "MamaCare is here to provide general educational information about pregnancy stages, trimester nutrition, safe physical wellness, and symptom management.\n\n"
+                     "MamaFollow is here to provide general educational information about pregnancy stages, trimester nutrition, safe physical wellness, and symptom management.\n\n"
                      "Could you please clarify if you'd like information about a specific pregnancy week (1-40), nutrition guidelines, safe exercise, or symptom relief? Always feel free to consult your OB-GYN for personalized medical advice.",
             'emergency': False,
             'links': [{'title': 'Explore 40-Week Tracker', 'url': '/tracker'}, {'title': 'Care Guides', 'url': '/health-tips'}]
@@ -216,12 +216,12 @@ class ChatbotService:
             try:
                 from google import genai
                 self.client = genai.Client(api_key=self.api_key)
-                print("[MamaCare Chatbot] Google GenAI client initialized with API key.")
+                print("[MamaFollow Chatbot] Google GenAI client initialized with API key.")
             except Exception as e:
-                print(f"[MamaCare Chatbot] Notice: Google GenAI initialization failed ({e}). Using expert knowledge engine fallback.")
+                print(f"[MamaFollow Chatbot] Notice: Google GenAI initialization failed ({e}). Using expert knowledge engine fallback.")
                 self.client = None
         else:
-            print("[MamaCare Chatbot] GEMINI_API_KEY not provided. Operating seamlessly in Expert Knowledge Engine mode.")
+            print("[MamaFollow Chatbot] GEMINI_API_KEY not provided. Operating seamlessly in Expert Knowledge Engine mode.")
 
     def generate_chat_response(self, user_message, conversation_history=None):
         if not user_message or not user_message.strip():
@@ -259,7 +259,7 @@ class ChatbotService:
                         'links': []
                     }
             except Exception as e:
-                print(f"[MamaCare Chatbot] Gemini API call exception ({e}), falling back to Expert Knowledge Engine.")
+                print(f"[MamaFollow Chatbot] Gemini API call exception ({e}), falling back to Expert Knowledge Engine.")
 
         # Fallback to rich rule-based clinical knowledge engine
         return PregnancyKnowledgeEngine.get_expert_response(user_message)

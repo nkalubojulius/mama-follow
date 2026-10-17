@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Daily Meal Reminders & Pregnancy Nutrition Schedule | MamaCare{% endblock %}
+{% block title %}Daily Meal Reminders & Pregnancy Nutrition Schedule | MamaFollow{% endblock %}
 
 {% block content %}
 <div class="container py-4">
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if ('Notification' in window) {
         Notification.requestPermission().then(permission => {
           if (permission === 'granted') {
-            alert('Browser notifications enabled! MamaCare will alert you when it is time for your scheduled meals.');
+            alert('Browser notifications enabled! MamaFollow will alert you when it is time for your scheduled meals.');
           } else {
             alert('Notification permission was not granted. On-screen banners and chimes will still alert you.');
           }

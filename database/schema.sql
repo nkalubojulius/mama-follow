@@ -1,4 +1,4 @@
--- MamaCare MySQL Database Schema
+-- MamaFollow MySQL Database Schema
 -- College Final Year Project: Pregnancy Care and Monitoring System
 
 CREATE DATABASE IF NOT EXISTS mamacare_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

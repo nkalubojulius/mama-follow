@@ -341,7 +341,7 @@ def contact():
                 (name, email, phone, subject, message),
                 commit=True
             )
-            flash("Thank you for reaching out! Your message has been safely received. A MamaCare care coordinator will reply soon.", "success")
+            flash("Thank you for reaching out! Your message has been safely received. A MamaFollow care coordinator will reply soon.", "success")
             return redirect(url_for('contact'))
             
     return render_template('contact.html')
@@ -394,7 +394,7 @@ def register():
                 )
                 session['user_id'] = new_id
                 session['user_name'] = name
-                flash(f"Welcome to MamaCare, {name}! Your maternal wellness journey begins now.", "success")
+                flash(f"Welcome to MamaFollow, {name}! Your maternal wellness journey begins now.", "success")
                 return redirect(url_for('profile'))
                 
     return render_template('register.html')
@@ -672,11 +672,11 @@ def reminders():
         ) or []
     else:
         meal_reminders = session.get('guest_meal_reminders', [
-            {'id': 1, 'meal_name': 'Warm Oatmeal with Walnuts & Chia Seeds', 'meal_type': 'Breakfast', 'reminder_time': '08:00', 'notes': 'Rich in iron, folate and slow-release carbs', 'is_active': 1},
-            {'id': 2, 'meal_name': 'Greek Yogurt with Sliced Strawberries', 'meal_type': 'Morning Snack', 'reminder_time': '11:00', 'notes': 'High calcium and protein boost', 'is_active': 1},
-            {'id': 3, 'meal_name': 'Spinach Lentil Bowl with Brown Rice & Avocado', 'meal_type': 'Lunch', 'reminder_time': '13:00', 'notes': 'Plant iron paired with healthy fats for DHA absorption', 'is_active': 1},
-            {'id': 4, 'meal_name': 'Roasted Chickpeas & 1 Glass Lemon Water', 'meal_type': 'Evening Snack', 'reminder_time': '17:00', 'notes': 'High fiber and hydration replenisher', 'is_active': 1},
-            {'id': 5, 'meal_name': 'Steamed Vegetables with Paneer/Tofu & Quinoa', 'meal_type': 'Dinner', 'reminder_time': '20:00', 'notes': 'Light, easily digestible to avoid nighttime heartburn', 'is_active': 1}
+            {'id': 1, 'meal_name': 'Millet Porridge with Groundnuts and a Boiled Egg', 'meal_type': 'Breakfast', 'reminder_time': '08:00', 'notes': 'Rich in iron, folate and slow-release carbs', 'is_active': 1},
+            {'id': 2, 'meal_name': 'Ripe Banana, Orange and Pasteurised Milk', 'meal_type': 'Morning Snack', 'reminder_time': '11:00', 'notes': 'High calcium and protein boost', 'is_active': 1},
+            {'id': 3, 'meal_name': 'Matooke with Beans, Dodo and Avocado', 'meal_type': 'Lunch', 'reminder_time': '13:00', 'notes': 'Plant iron paired with healthy fats for DHA absorption', 'is_active': 1},
+            {'id': 4, 'meal_name': 'Boiled Sweet Potatoes with Groundnuts/Cowpeas & 1 Glass Lemon Water', 'meal_type': 'Evening Snack', 'reminder_time': '17:00', 'notes': 'High fiber and hydration replenisher', 'is_active': 1},
+            {'id': 5, 'meal_name': 'Posho with Well-Cooked Fish and Steamed Sukuma Wiki', 'meal_type': 'Dinner', 'reminder_time': '20:00', 'notes': 'Light, easily digestible to avoid nighttime heartburn', 'is_active': 1}
         ])
     
     return render_template('reminders.html', user=user, reminders=meal_reminders)
@@ -809,11 +809,11 @@ def api_toggle_reminder(reminder_id):
 def api_load_presets():
     user_id = session.get('user_id')
     presets = [
-        ('Warm Oatmeal with Walnuts & Chia Seeds', 'Breakfast', '08:00', 'Rich in iron, folate and slow-release carbs'),
-        ('Greek Yogurt with Sliced Strawberries', 'Morning Snack', '11:00', 'High calcium and protein boost'),
-        ('Spinach Lentil Bowl with Brown Rice & Avocado', 'Lunch', '13:00', 'Plant iron paired with healthy fats for DHA absorption'),
-        ('Roasted Chickpeas & 1 Glass Lemon Water', 'Evening Snack', '17:00', 'High fiber and hydration replenisher'),
-        ('Steamed Vegetables with Paneer/Tofu & Quinoa', 'Dinner', '20:00', 'Light, easily digestible to avoid nighttime heartburn')
+        ('Millet Porridge with Groundnuts and a Boiled Egg', 'Breakfast', '08:00', 'Rich in iron, folate and slow-release carbs'),
+        ('Ripe Banana, Orange and Pasteurised Milk', 'Morning Snack', '11:00', 'High calcium and protein boost'),
+        ('Matooke with Beans, Dodo and Avocado', 'Lunch', '13:00', 'Plant iron paired with healthy fats for DHA absorption'),
+        ('Boiled Sweet Potatoes with Groundnuts/Cowpeas & 1 Glass Lemon Water', 'Evening Snack', '17:00', 'High fiber and hydration replenisher'),
+        ('Posho with Well-Cooked Fish and Steamed Sukuma Wiki', 'Dinner', '20:00', 'Light, easily digestible to avoid nighttime heartburn')
     ]
     if user_id:
         db.query("DELETE FROM meal_reminders WHERE user_id = %s", (user_id,), commit=True)
@@ -874,5 +874,5 @@ def api_add_from_chat():
 
 if __name__ == '__main__':
     # Initialize app
-    print("[MamaCare] Starting Pregnancy Care and Monitoring Portal on http://127.0.0.1:5000 ...")
+    print("[MamaFollow] Starting Pregnancy Care and Monitoring Portal on http://127.0.0.1:5000 ...")
     app.run(debug=True, port=5000)

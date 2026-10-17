@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Sign In | MamaCare{% endblock %}
+{% block title %}Sign In | MamaFollow{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -9,7 +9,7 @@
       <div class="dash-card shadow-md">
         <div class="dash-header text-center bg-white border-bottom-0 pb-0">
           <h3 class="fw-bold text-dark mb-1">Welcome Back</h3>
-          <p class="small text-muted">Sign in to your MamaCare pregnancy dashboard</p>
+          <p class="small text-muted">Sign in to your MamaFollow pregnancy dashboard</p>
         </div>
         <div class="dash-body">
           <form action="{{ url_for('login', next=request.args.get('next')) }}" method="POST">

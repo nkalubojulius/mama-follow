@@ -1,5 +1,5 @@
 # pregnancy_data.py
-# Comprehensive clinical and educational pregnancy data for MamaCare
+# Comprehensive clinical and educational pregnancy data for MamaFollow
 
 _RAW_WEEKS_DATA = {
     "1": {

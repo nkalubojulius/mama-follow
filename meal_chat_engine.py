@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from pregnancy_data import NUTRITION_GUIDE, WEEKS_DATA
 
-MEAL_SYSTEM_PROMPT = """You are MamaCare Smart Nutrition AI, a friendly, encouraging, and clinically informed pregnancy meal planning assistant.
+MEAL_SYSTEM_PROMPT = """You are MamaFollow Smart Nutrition AI, a friendly, encouraging, and clinically informed pregnancy meal planning assistant.
 Your goal is to provide expectant mothers with wholesome, balanced, trimester-appropriate meal ideas and general educational nutrition support.
 
 CRITICAL SAFETY & MEDICAL RULES:
@@ -121,7 +121,7 @@ class MealKnowledgeEngine:
             )
 
         reply = (
-            f"🥗 **Personalized MamaCare Daily Meal Plan**\n\n"
+            f"🥗 **Personalized MamaFollow Daily Meal Plan**\n\n"
             f"**Diet Profile**: {diet_type} • **Stage**: {tri_title}\n"
             f"**Daily Nutrient Priority**: {tri_nutrients}\n\n"
             f"---\n\n"
@@ -173,12 +173,12 @@ class MealChatService:
             try:
                 from google import genai
                 self.client = genai.Client(api_key=self.api_key)
-                print("[MamaCare Meal AI] Google GenAI client initialized for Smart Meal Chat.")
+                print("[MamaFollow Meal AI] Google GenAI client initialized for Smart Meal Chat.")
             except Exception as e:
-                print(f"[MamaCare Meal AI] Notice: Google GenAI initialization failed ({e}). Operating in Expert Knowledge Engine mode.")
+                print(f"[MamaFollow Meal AI] Notice: Google GenAI initialization failed ({e}). Operating in Expert Knowledge Engine mode.")
                 self.client = None
         else:
-            print("[MamaCare Meal AI] GEMINI_API_KEY not provided. Operating seamlessly in Expert Knowledge Engine mode.")
+            print("[MamaFollow Meal AI] GEMINI_API_KEY not provided. Operating seamlessly in Expert Knowledge Engine mode.")
 
     def generate_meal_response(self, user_message, user_preferences=None, chat_history=None):
         user_msg = (user_message or '').strip()
@@ -226,7 +226,7 @@ class MealChatService:
                         'links': expert_data.get('links', [])
                     }
             except Exception as e:
-                print(f"[MamaCare Meal AI] Gemini call exception ({e}), falling back to Expert Knowledge Engine.")
+                print(f"[MamaFollow Meal AI] Gemini call exception ({e}), falling back to Expert Knowledge Engine.")
 
         # Fallback to Expert Clinical Nutrition Engine
         return MealKnowledgeEngine.generate_expert_meal_plan(user_msg, prefs)

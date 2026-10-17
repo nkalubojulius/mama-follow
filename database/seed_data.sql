@@ -1,4 +1,4 @@
--- MamaCare Seed Data for Evaluation & Viva Voce
+-- MamaFollow Seed Data for Evaluation & Viva Voce
 USE mamacare_db;
 
 -- Insert a demo test user (password is 'password123')
@@ -12,14 +12,14 @@ VALUES (
     DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 140 DAY), INTERVAL 280 DAY),
     'O+',
     'Michael Johnson (Husband)',
-    '+1 (555) 234-5678'
+    '+256 123 456 789'
 );
 
 -- Sample Doctor Appointments
 INSERT INTO appointments (user_id, doctor_name, clinic_hospital, appointment_date, appointment_time, reason, notes, is_completed)
 VALUES 
-(1, 'Dr. Emily Carter, OB-GYN', 'City Maternity Hospital, Suite 302', DATE_ADD(CURDATE(), INTERVAL 5 DAY), '10:30:00', '20-Week Anatomy Scan', 'Drink 2 glasses of water prior to ultrasound.', FALSE),
-(1, 'Dr. Robert Davis', 'Wellness Family Clinic', DATE_ADD(CURDATE(), INTERVAL 20 DAY), '14:00:00', 'Routine Prenatal Checkup & Blood Pressure', 'Discuss iron supplement dosage.', FALSE);
+(1, 'Dr.Mike Mawanda, OB-GYN', 'International Hospital Kampala', DATE_ADD(CURDATE(), INTERVAL 5 DAY), '10:30:00', '20-Week Anatomy Scan', 'Drink 2 glasses of water prior to ultrasound.', FALSE),
+(1, 'Dr. Robert Kayondo', 'Wellness Family Clinic, Kampala', DATE_ADD(CURDATE(), INTERVAL 20 DAY), '14:00:00', 'Routine Prenatal Checkup & Blood Pressure', 'Discuss iron supplement dosage.', FALSE);
 
 -- Sample Medicine Reminders
 INSERT INTO medicine_reminders (user_id, medicine_name, dosage, frequency, reminder_time, instructions, is_active)
@@ -31,11 +31,11 @@ VALUES
 -- Sample Meal Reminders
 INSERT INTO meal_reminders (user_id, meal_name, meal_type, reminder_time, notes, is_active)
 VALUES
-(1, 'Warm Oatmeal with Walnuts & Chia Seeds', 'Breakfast', '08:00:00', 'Rich in iron, folate and slow-release carbs', TRUE),
-(1, 'Greek Yogurt with Sliced Strawberries', 'Morning Snack', '11:00:00', 'High calcium and protein boost', TRUE),
-(1, 'Spinach Lentil Bowl with Brown Rice & Avocado', 'Lunch', '13:00:00', 'Plant iron paired with healthy fats for DHA absorption', TRUE),
-(1, 'Roasted Chickpeas & 1 Glass Lemon Water', 'Evening Snack', '17:00:00', 'High fiber and hydration replenisher', TRUE),
-(1, 'Steamed Vegetables with Paneer/Tofu & Quinoa', 'Dinner', '20:00:00', 'Light, easily digestible to avoid nighttime heartburn', TRUE);
+(1, 'Millet Porridge with Groundnuts and a Boiled Egg', 'Breakfast', '08:00:00', 'Rich in iron, folate and slow-release carbs', TRUE),
+(1, 'Ripe Banana, Orange and Pasteurised Milk', 'Morning Snack', '11:00:00', 'High calcium and protein boost', TRUE),
+(1, 'Matooke with Beans, Dodo and Avocado', 'Lunch', '13:00:00', 'Plant iron paired with healthy fats for DHA absorption', TRUE),
+(1, 'Boiled Sweet Potatoes with Groundnuts/Cowpeas & 1 Glass Lemon Water', 'Evening Snack', '17:00:00', 'High fiber and hydration replenisher', TRUE),
+(1, 'Posho with Well-Cooked Fish and Steamed Sukuma Wiki', 'Dinner', '20:00:00', 'Light, easily digestible to avoid nighttime heartburn', TRUE);
 
 -- Sample User Diet Preferences
 INSERT INTO user_diet_preferences (user_id, trimester, pregnancy_week, dietary_preference, allergies, dietary_restrictions, foods_usually_eaten, medical_conditions)

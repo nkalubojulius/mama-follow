@@ -1,4 +1,4 @@
-# MamaCare – Pregnancy Care and Monitoring Website
+# MamaFollow – Pregnancy Care and Monitoring Website
 **A Modern, Responsive, and User-Friendly Web Application for Maternal Health and Pregnancy Tracking**  
 *College Final-Year Project*
 
@@ -6,10 +6,10 @@
 
 ## 1. Project Overview & Abstract
 
-**MamaCare** is an evidence-based pregnancy care and monitoring web application created to assist expectant mothers throughout the 40 weeks of gestation. The platform combines clinical due date estimation algorithms (**Naegele's Rule**), developmental milestone tracking, personalized nutrition and safe exercise guidance, clinical appointment management, and daily medication reminders into an intuitive, maternal-themed web interface.
+**MamaFollow** is an evidence-based pregnancy care and monitoring web application created to assist expectant mothers throughout the 40 weeks of gestation. The platform combines clinical due date estimation algorithms (**Naegele's Rule**), developmental milestone tracking, personalized nutrition and safe exercise guidance, clinical appointment management, and daily medication reminders into an intuitive, maternal-themed web interface.
 
 > **Crucial Medical Disclaimer:**  
-> MamaCare is developed strictly for educational and informational support and is **not** a replacement for professional medical advice, clinical diagnosis, or emergency obstetric care.
+> MamaFollow is developed strictly for educational and informational support and is **not** a replacement for professional medical advice, clinical diagnosis, or emergency obstetric care.
 
 ---
 
@@ -48,7 +48,7 @@
     - Danger sign checklist (preeclampsia symptoms, heavy bleeding, fluid leakage, decreased fetal movements).
     - 24/7 national emergency hotline directory.
     - Comprehensive hospital go-bag checklist for mom, baby, and birth partner.
-11. **MamaCare AI Chatbot Assistant**:
+11. **MamaFollow AI Chatbot Assistant**:
     - Interactive floating assistant in bottom-right corner for 24/7 educational pregnancy guidance.
     - Powered by **Google GenAI (Gemini 2.5 Flash)** with an intelligent clinical Knowledge Engine fallback.
     - Answers questions on trimesters, 40-week milestones, nutrition, safe exercises, hydration, symptom relief, and due dates.
@@ -119,7 +119,7 @@ pip install -r requirements.txt
 
 ### Step 2: Configure Database (Optional)
 - **Option A (MySQL - Recommended for Production)**: Start your local MySQL server (XAMPP / WAMP / MySQL Server). The application automatically connects to database `mamacare_db` on `localhost:3306` with user `root`.
-- **Option B (Zero-Configuration SQLite - Automatic Fallback)**: If MySQL is not running or credentials are not configured, MamaCare **automatically creates and initializes a local SQLite database** (`database/mamacare.db`) with full sample data so the application runs seamlessly out-of-the-box!
+- **Option B (Zero-Configuration SQLite - Automatic Fallback)**: If MySQL is not running or credentials are not configured, MamaFollow **automatically creates and initializes a local SQLite database** (`database/mamacare.db`) with full sample data so the application runs seamlessly out-of-the-box!
 
 ### Step 3: Start the Flask Application
 ```bash
@@ -135,14 +135,14 @@ Open your web browser and navigate to: **`http://127.0.0.1:5000`**
 
 ## 7. College Viva Voce Examination Q&A
 
-**Q1: What is the main objective of the MamaCare project?**  
+**Q1: What is the main objective of the MamaFollow project?**  
 *Answer:* To provide expectant mothers with an accessible, clinically informed web platform to calculate due dates, monitor 40 weeks of fetal growth, access safe nutrition and exercise guidelines, and manage medical appointments and daily medications.
 
 **Q2: How does Naegele's Rule calculate the pregnancy due date?**  
 *Answer:* Naegele's Rule adds 280 days (40 weeks / 10 lunar months) to the first day of the mother's Last Menstrual Period (LMP). It also accounts for menstrual cycle length variations beyond 28 days.
 
-**Q3: How are passwords stored securely in MamaCare?**  
+**Q3: How are passwords stored securely in MamaFollow?**  
 *Answer:* Passwords are never stored in plain text. They are hashed using cryptographic salt-hash algorithms (`scrypt` or `pbkdf2:sha256`) via Python's `werkzeug.security` module.
 
 **Q4: How does the application handle database portability?**  
-*Answer:* MamaCare includes a unified Database Manager (`database/db.py`) that targets MySQL by default, but provides an intelligent automatic fallback to SQLite if MySQL is offline, ensuring zero startup failure during evaluation.
+*Answer:* MamaFollow includes a unified Database Manager (`database/db.py`) that targets MySQL by default, but provides an intelligent automatic fallback to SQLite if MySQL is offline, ensuring zero startup failure during evaluation.
